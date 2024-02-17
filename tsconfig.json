@@ -1,0 +1,25 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "rootDir": "src",
+    "types": ["node"],
+    "strict": true,
+    "sourceMap": true,
+    "declaration": false,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es6",
+    "module": "commonjs",
+    "typeRoots": ["node_modules/@types"],
+    "lib": ["es2020", "es6", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "outDir": "./dist",
+    "baseUrl": ".",
+    "noImplicitAny": false
+  },
+  "exclude": ["node_modules", "tmp", "dist"],
+  "include": ["src/**/*.ts"]
+}

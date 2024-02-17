@@ -1,0 +1,20 @@
+{
+  "name": "civitai-sdk",
+  "version": "0.1.0",
+  "description": "JavaScript client for Civitai's generator",
+  "scripts": {
+    "generate": "openapi --input ./swagger.json --output ./generated",
+    "check": "tsc",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.19",
+    "dotenv": "^16.4.4",
+    "jest": "^29.7.0",
+    "openapi-typescript-codegen": "^0.27.0"
+  },
+  "dependencies": {
+    "tslib": "^2.6.2",
+    "typescript": "^5.3.3"
+  }
+}
