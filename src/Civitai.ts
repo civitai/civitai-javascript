@@ -6,8 +6,11 @@ interface CivitaiConfig {
 }
 
 class Civitai {
-  jobs: {
-    create: (input: any, wait: boolean) => Promise<any>;
+  image: {
+    fromText: (input: any) => Promise<any>;
+    fromComfy: (input: any) => Promise<any>;
+  };
+  job: {
     get: (jobId: string) => Promise<any>;
   };
 
@@ -16,17 +19,36 @@ class Civitai {
       Authorization: `Bearer ${config.token}`,
     };
 
-    this.jobs = {
-      create: async (input: any, wait: boolean = true) => {
-        console.log(`Creating job with wait=${wait} and input=`, input, "\n");
-        return await JobsService.postV1ConsumerJobs(wait, input);
+    this.image = {
+      fromText: async (input: any) => {
+        const jobInput = {
+          $type: "textToImage", // Set the job type internally
+          ...input,
+        };
+        console.log(`Creating TextToImage job with input=`, jobInput);
+        return await JobsService.postV1ConsumerJobs(true, jobInput);
       },
-      get: async (jobId: string) => {
-        console.log(`Fetching job status for jobId ${jobId}`);
-        return await JobsService.getV1ConsumerJobs1(jobId);
+      fromComfy: async (input: any) => {
+        const jobInput = {
+          $type: "comfy",
+          ...input,
+          quantity: 1,
+          priority: {
+            value: 1,
+          },
+        };
+        console.log(`Creating ComfyUI job with input=`, jobInput);
+        return await JobsService.postV1ConsumerJobs(true, jobInput);
+      },
+    };
+
+    this.job = {
+      get: async (token: string) => {
+        console.log(`Fetching job status for token ${token}`);
+        return await JobsService.getV1ConsumerJobs(token);
       },
     };
   }
 }
 
-module.exports = Civitai;
+export default Civitai;

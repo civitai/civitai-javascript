@@ -2,10 +2,10 @@
   "compileOnSave": true,
   "compilerOptions": {
     "rootDir": "src",
-    "types": ["node"],
+    "types": ["node", "jest"],
     "strict": true,
     "sourceMap": true,
-    "declaration": false,
+    "declaration": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",

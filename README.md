@@ -5,7 +5,7 @@ A node.js client for Civitai's generator to run Civitai models from your Node.js
 ## Installation
 
 ```
-npm install civitai-sdk
+npm install civitai
 ```
 
 ## Usage
@@ -13,7 +13,7 @@ npm install civitai-sdk
 Create the client:
 
 ```typescript
-import Civitai from "civitai-sdk";
+import Civitai from "civitai";
 ```
 
 ```typescript
