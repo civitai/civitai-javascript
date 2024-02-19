@@ -13,27 +13,16 @@ describe("Create FromText Job", () => {
 
   test("successfully creates a FromText job", async () => {
     const input = {
-      model: "@civitai/46846",
-      baseModel: "SD_1_5",
+      model: "@civitai/128713",
       params: {
-        prompt:
-          "Style by Style-Empire, award winning Photo of Shakira as a Victorian Princess, with small breasts and big hips wearing a sundress, backlit, undercut hairstyle, digital painting, concept art, smooth, sharp focus, rule of thirds, dark fantasy,intricate details, art by aleksi briclot and Greg Rutkowski, medium shot breast, tree lined street",
-        negativePrompt:
-          "Deformed, blurry, bad anatomy, disfigured, extra limb, ugly, poorly drawn hands, missing limb, blurry, floating limbs, ((mutated hands and fingers)), ((anthro)), ((animal)), hat, crown, flowers, candle",
-        scheduler: "DPM2MKarras",
-        steps: 55,
-        cfgScale: 9,
+        prompt: "A cat",
+        negativePrompt: "A dog",
+        scheduler: "EulerA",
+        steps: 20,
+        cfgScale: 7,
         width: 512,
         height: 768,
-        seed: -1,
-        clipSkip: 1,
-      },
-      additionalNetworks: {
-        "@civitai/2179": {
-          type: "TextualInversion",
-          strength: 1.0,
-          triggerWord: "Style-Empire",
-        },
+        clipSkip: 4,
       },
     };
     const output = await civitai.image.fromText(input);

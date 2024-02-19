@@ -3,6 +3,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
 import { cn } from "@/lib/utils";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "Civitai Next.js App",
@@ -29,6 +30,7 @@ export default function RootLayout({
         )}
       >
         {children}
+        <Toaster />
       </body>
     </html>
   );
