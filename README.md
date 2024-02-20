@@ -14,7 +14,7 @@ Create the client:
 
 ```js
 // ESM (where `"type": module` in package.json or using .mjs extension)
-import Civitai from "civitai";
+import { Civitai } from "civitai";
 
 // CommonJS (using .cjs extension)
 const Civitai = require("civitai");
