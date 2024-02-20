@@ -1,12 +1,12 @@
 "use client";
 import { toast } from "sonner";
 
-export default function CopyPackage() {
+export default function CopyCommand() {
   const copyToClipboard = () => {
     navigator.clipboard
       .writeText("npm i civitai")
       .then(() => {
-        toast.success("Copied to clipboard");
+        toast.success("Copied to clipboard", { position: "top-center" });
       })
       .catch((err) => {
         toast.error("Error copying to clipboard", err);

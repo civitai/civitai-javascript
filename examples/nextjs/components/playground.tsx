@@ -1,7 +1,5 @@
 "use client";
 
-import { civitai } from "@/lib/civitai";
-
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -20,12 +18,13 @@ import { SuccessIcon } from "./ui/success-icon";
 
 import { z } from "zod";
 import { usePlaygroundForm } from "@/hooks/use-form";
-import { cn, formSchema } from "@/lib/utils";
+import { cn, formSchema, pollJob } from "@/lib/utils";
+import { toast } from "sonner";
 
 export default function Playground() {
   const form = usePlaygroundForm();
 
-  const [prediction, setPrediction] = useState(null);
+  const [imageUrl, setImageUrl] = useState("");
   // Form states
   const [isSuccess, setIsSuccess] = useState(false);
   const [isSubmitting, setSubmitting] = useState(false);
@@ -36,28 +35,50 @@ export default function Playground() {
       const input = {
         model: "@civitai/128713",
         params: {
-          prompt: "A cat",
-          negativePrompt: "A dog",
+          prompt: values.prompt,
+          negativePrompt:
+            "(deformed iris, deformed pupils, semi-realistic, cgi, 3d, render, sketch, cartoon, drawing, anime, mutated hands and fingers:1.4), (deformed, distorted, disfigured:1.3), poorly drawn, bad anatomy, wrong anatomy, extra limb, missing limb, floating limbs, disconnected limbs, mutation, mutated, ugly, disgusting, amputation",
           scheduler: "EulerA",
           steps: 20,
           cfgScale: 7,
           width: 512,
-          height: 768,
-          clipSkip: 4,
-        },
-        quantity: 1,
-        priority: {
-          value: 1,
+          height: 512,
+          clipSkip: 2,
         },
       };
-      const response = await civitai.image.fromText(input);
-      console.log("Response:", JSON.stringify(response, null, 2));
-      // setPrediction(response.jobs[0].result);
-      setIsSuccess(true);
+      const response = await fetch("/api/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(input),
+      });
+      const data = await response.json();
+      const token = data.token;
+
+      if (token) {
+        pollJob(token)
+          .then((imageUrl) => {
+            console.log("Job result:", imageUrl);
+            setImageUrl(imageUrl);
+            setIsSuccess(true);
+          })
+          .catch((error) => {
+            console.error("Polling error:", error);
+            toast.error("Failed to generate image");
+          })
+          .finally(() => {
+            setSubmitting(false);
+            setTimeout(() => {
+              setIsSuccess(false);
+            }, 2000);
+          });
+      } else {
+        toast.error("Failed to generate image");
+      }
     } catch (error) {
       console.error("Error submitting form:", error);
-      setIsSuccess(false);
-    } finally {
+      toast.error("Failed to generate image: " + error);
       setSubmitting(false);
     }
   }
@@ -66,7 +87,7 @@ export default function Playground() {
     <div className="flex flex-col gap-8 mx-auto px-8 md:px-0">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="grid grid-cols-2 gap-5">
+          <div className="grid md:grid-cols-2 gap-5">
             <div className="flex flex-col space-y-4">
               <div className="flex flex-col space-y-2">
                 <Label htmlFor="input">Input</Label>
@@ -94,24 +115,11 @@ export default function Playground() {
                 <Button
                   disabled={isSubmitting}
                   className={cn(
-                    "w-full md:w-[140px]",
+                    "w-full md:w-[140px] h-10",
                     isSuccess &&
-                      "w-full h-10 md:h-9 text-white lg:w-auto min-w-[140px] duration-150 bg-green-500 hover:bg-green-600 hover:text-slate-100 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 active:scale-100 active:bg-green-800 active:text-green-100"
+                      "text-white duration-150 bg-green-500 hover:bg-green-600 hover:text-slate-100 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 active:scale-100 active:bg-green-800 active:text-green-100"
                   )}
                   type="submit"
-                  onClick={async (event) => {
-                    event.preventDefault();
-
-                    const isValid = await form.trigger();
-                    const {
-                      formState: { errors },
-                    } = form;
-                    if (isValid) {
-                      onSubmit(form.getValues());
-                    } else {
-                      console.log("errors", errors);
-                    }
-                  }}
                 >
                   {isSubmitting ? (
                     <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
@@ -133,7 +141,7 @@ export default function Playground() {
                 </Button>
               </div>
             </div>
-            <div className="min-h-[320px] min-w-[320px] md:min-h-[500px] md:min-w-[500px] rounded-md border bg-muted">
+            <div className="relative h-[320px] w-[320px] md:h-[500px] md:w-[500px] rounded-md border bg-muted">
               {isSubmitting ? (
                 <div className="flex flex-col items-center justify-center absolute top-0 left-0 w-full h-full gap-3">
                   <div className="absolute bottom-4 w-full text-center text-slate-500 text-xs">
@@ -141,23 +149,21 @@ export default function Playground() {
                   </div>
                 </div>
               ) : (
-                prediction && (
-                  <div className="relative md:min-h-[420px] md:min-w-[420px] flex bg-muted rounded-md overflow-hidden group">
-                    <Link
-                      href={prediction}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <Image
-                        alt="Glyph image output"
-                        src={prediction}
-                        width={768}
-                        height={768}
-                        quality={100}
-                        className="object-cover transition-all md:hover:scale-105"
-                      />
-                    </Link>
-                  </div>
+                imageUrl && (
+                  <Link
+                    className="relative h-[320px] w-[320px] md:h-[500px] md:w-[500px] flex bg-muted rounded-md overflow-hidden group"
+                    href={imageUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Image
+                      alt="Glyph image output"
+                      src={imageUrl}
+                      width={512}
+                      height={512}
+                      className="object-cover transition-all md:hover:scale-105"
+                    />
+                  </Link>
                 )
               )}
             </div>

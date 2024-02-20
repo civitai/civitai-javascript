@@ -1,11 +1,14 @@
 import Link from "next/link";
 import { Button } from "./ui/button";
+import { ThemeToggle } from "./ui/theme-toggle";
 
 export default async function Nav() {
   return (
-    <nav className="absolute top-5 right-10 flex">
+    <nav className="absolute top-5 right-10 flex items-center gap-1">
+      <ThemeToggle />
+
       <Link href="/signin" className="group inline-flex items-center">
-        <Button variant={"ghost"} size={"sm"}>
+        <Button variant={"ghost"}>
           <span className="translate-x-2 group-hover:translate-x-0 group-hover:opacity-100 transition-all">
             Clone repo
           </span>
