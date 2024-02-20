@@ -22,7 +22,7 @@ const Civitai = require("civitai");
 
 ```js
 const civitai = new Civitai({
-  token: "YOUR_API_TOKEN",
+  auth: "YOUR_API_TOKEN",
 });
 ```
 
@@ -73,9 +73,9 @@ const output = civitai.job.get(response.token);
 const civitai = new Civitai(options);
 ```
 
-| name           | type   | description                    |
-| -------------- | ------ | ------------------------------ |
-| `options.auth` | string | **Required**. API access token |
+| name   | type   | description                    |
+| ------ | ------ | ------------------------------ |
+| `auth` | string | **Required**. API access token |
 
 ### `civitai.job.get`
 
