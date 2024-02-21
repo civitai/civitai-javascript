@@ -33,7 +33,7 @@ export default function Playground() {
     setSubmitting(true);
     try {
       const input = {
-        model: "@civitai/128713",
+        model: "@civitai/130072",
         params: {
           prompt: values.prompt,
           negativePrompt:
@@ -59,13 +59,13 @@ export default function Playground() {
       if (token) {
         pollJob(token)
           .then((imageUrl) => {
-            console.log("Job result:", imageUrl);
             setImageUrl(imageUrl);
             setIsSuccess(true);
           })
           .catch((error) => {
-            console.error("Polling error:", error);
-            toast.error("Failed to generate image");
+            toast.error("Failed to generate image", {
+              description: error.message,
+            });
           })
           .finally(() => {
             setSubmitting(false);

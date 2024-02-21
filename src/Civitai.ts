@@ -22,7 +22,7 @@ class Civitai {
     };
 
     this.image = {
-      fromText: async (input, wait = false) => {
+      fromText: async (input, wait = true) => {
         const jobInput = {
           $type: "textToImage",
           ...input,
@@ -42,6 +42,20 @@ class Civitai {
             scheduled: job.scheduled,
           })),
         };
+
+        // If wait is true, initiate extended polling
+        if (wait) {
+          console.log(`Waiting for job completion, token: ${response.token}`);
+          try {
+            const jobResult = await this.pollForJobCompletion(response.token);
+            if (jobResult && modifiedResponse.jobs.length > 0) {
+              modifiedResponse.jobs[0].result = jobResult;
+            }
+          } catch (error) {
+            console.error(`Error during job completion polling: ${error}`);
+          }
+        }
+
         return modifiedResponse;
       },
       fromComfy: async (input: any) => {
@@ -68,12 +82,45 @@ class Civitai {
           result: job.result,
           scheduled: job.scheduled,
         }));
-        // Return the modified response with only the specified fields for jobs
         return {
           jobs: modifiedJobs,
         };
       },
     };
+  }
+
+  // Long polling for job completion with a timeout after 5 minutes
+  async pollForJobCompletion(
+    token: string,
+    interval: number = 30000,
+    timeout: number = 300000
+  ): Promise<any> {
+    console.log(
+      `Polling for job completion for token ${token.slice(
+        0,
+        5
+      )}...${token.slice(-5)}`
+    );
+    const startTime = Date.now();
+
+    const checkJobStatus = async (): Promise<any> => {
+      if (Date.now() - startTime > timeout) {
+        throw new Error(`Polling timeout exceeded for token ${token}`);
+      }
+
+      const response = await this.job.get(token);
+      const job = response.jobs && response.jobs[0];
+      if (job && job.result && job.result.blobUrl) {
+        console.log(`Job completed with blobUrl: ${job.result.blobUrl}`);
+        return job.result;
+      } else {
+        console.log(`Job not completed yet. Polling again...`);
+        await new Promise((resolve) => setTimeout(resolve, interval));
+        return checkJobStatus();
+      }
+    };
+
+    return checkJobStatus();
   }
 }
 

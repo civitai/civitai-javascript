@@ -14,29 +14,29 @@ describe("Create FromText Job", () => {
   test("successfully creates a FromText job", async () => {
     const input = {
       baseModel: "SDXL",
-      model: "@civitai/128713",
+      model: "urn:air:sd1:checkpoint:civitai:139562@344487",
       params: {
         prompt:
-          "instagram photo, closeup face photo of 23 y.o Chloe in black sweater, cleavage, pale skin, (smile:0.4), hard shadows",
-        negativePrompt:
-          "(deformed iris, deformed pupils, semi-realistic, cgi, 3d, render, sketch, cartoon, drawing, anime, mutated hands and fingers:1.4), (deformed, distorted, disfigured:1.3), poorly drawn, bad anatomy, wrong anatomy, extra limb, missing limb, floating limbs, disconnected limbs, mutation, mutated, ugly, disgusting, amputation",
+          "paparazzi photography  of of taylor swift, eyeliner, eyeshadow, long eyelashes, mascara, red lips, long blonde hair with fringe,   shot on Diana F+ high key lighting, in a warehouse, upper body, Fog , Hands By the Mouth Tunic,",
+        negativePrompt: "",
         scheduler: "EulerA",
         steps: 20,
         cfgScale: 7,
         width: 512,
-        height: 768,
-        clipSkip: 4,
+        height: 512,
+        seed: -1,
+        clipSkip: 2,
       },
-      // additionalNetworks: {
-      //   "civitai:58390@62833": {
-      //     type: "Lora",
-      //     strength: 1,
-      //   },
-      // },
+      additionalNetworks: {
+        "urn:air:sd1:lora:civitai:260037@293292": {
+          type: "Lora",
+          strength: 1.0,
+        },
+      },
     };
     const output = await civitai.image.fromText(input);
     console.log("Response:", JSON.stringify(output, null, 2));
     console.log("Result:", output.jobs[0].result);
     expect(output).toBeDefined();
-  }, 5000);
+  }, 300000);
 });

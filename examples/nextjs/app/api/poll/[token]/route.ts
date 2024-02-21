@@ -15,11 +15,9 @@ export async function GET(
   { params }: { params: { token: string } }
 ) {
   const token = params.token;
-  console.log("Fetching job status for token", token);
 
   try {
     const response = await civitai.job.get(token);
-    console.log("Response:", JSON.stringify(response, null, 2));
 
     const jobs = response.jobs || [];
     const result = jobs.map((job: Job) => ({

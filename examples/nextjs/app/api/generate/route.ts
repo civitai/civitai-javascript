@@ -6,7 +6,6 @@ export async function POST(request: Request) {
 
   try {
     const response = await civitai.image.fromText(input);
-    console.log("response", JSON.stringify(response, null, 2));
 
     const token = response.token;
 

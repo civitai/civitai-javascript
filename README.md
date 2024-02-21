@@ -10,7 +10,7 @@ npm install civitai
 
 ## Usage
 
-Create the client:
+#### Create the client:
 
 ```js
 // ESM (where `"type": module` in package.json or using .mjs extension)
@@ -26,15 +26,17 @@ const civitai = new Civitai({
 });
 ```
 
-Create a txt2img job:
+#### Create a txt2img job:
 
 ```js
 const input = {
   baseModel: "SDXL",
   model: "@civitai/128713",
   params: {
-    prompt: "A cat",
-    negativePrompt: "A dog",
+    prompt:
+      "instagram photo, closeup face photo of 23 y.o Chloe in black sweater, cleavage, pale skin, (smile:0.4), hard shadows",
+    negativePrompt:
+      "(deformed iris, deformed pupils, semi-realistic, cgi, 3d, render, sketch, cartoon, drawing, anime, mutated hands and fingers:1.4), (deformed, distorted, disfigured:1.3)",
     scheduler: "EulerA",
     steps: 20,
     cfgScale: 7,
@@ -43,18 +45,21 @@ const input = {
     clipSkip: 4,
   },
 };
-const response = await civitai.image.fromText(input, (wait = true)); // wait is false by default with timeout of 30 seconds
-const output = response.jobs[0].result.blobUrl;
 ```
 
-_Note: Running in the background times out at 30 seconds._
-
-<br/>
-
-Or wait for the job to finish by running the generation in the background:
+Run a model and await the result:
 
 ```js
-const response = await civitai.image.fromText(input, (wait = false));
+const response = await civitai.image.fromText(input);
+const output = response.jobs[0].result;
+```
+
+_Note: Jobs time out after 5 minutes._
+
+Or wait for the job to finish by running the generation in the background a.k.a short polling:
+
+```js
+const response = await civitai.image.fromText(input, false); // Add false flag
 ```
 
 Then fetch the result later:
@@ -79,7 +84,7 @@ const civitai = new Civitai(options);
 
 ### `civitai.job.get`
 
-Get the status of a job by looking up the job token
+Get the status of a job by looking up the job token.
 
 ```js
 const response = await civitai.job.get(token);
@@ -100,9 +105,9 @@ const response = await civitai.job.get(token);
 ]
 ```
 
-<br/>
-
 ### `civitai.image.fromText`
+
+Run a model with inputs you provide.
 
 ```js
 const response = await civitai.image.fromText(options);
@@ -116,7 +121,7 @@ const response = await civitai.image.fromText(options);
 | `params.negativePrompt` | string \| null                       | **Required**. The negative prompt for the image generation.                                  |
 | `params.scheduler`      | [Scheduler](src/models/Scheduler.ts) | **Required**. The scheduler algorithm to use.                                                |
 | `params.steps`          | number                               | **Required**. The number of steps for the image generation process.                          |
-| `params.cfgScale`       | number \| null                       | **Required**. The CFG scale for the image generation.                                        |
+| `params.cfgScale`       | number                               | **Required**. The CFG scale for the image generation.                                        |
 | `params.width`          | number                               | **Required**. The width of the generated image.                                              |
 | `params.height`         | number                               | **Required**. The height of the generated image.                                             |
 | `params.seed`           | number                               | **Required**. The seed for the image generation process.                                     |
@@ -141,8 +146,61 @@ const response = await civitai.image.fromText(options);
 }
 ```
 
-<br />
-
 ## Examples
 
 [Build a web app with Next.js App Router](https://github.com/civitai/civitai-javascript)
+
+## Contribution
+
+Contributions to the Civitai Generator Node.js Client are welcome! Here's how you can contribute or build the project from source.
+
+### Prerequisites
+
+- Node.js (version specified in `package.json` under `engines.node`)
+- npm or yarn (version specified in `package.json` under `engines.npm` or `engines.yarn`)
+
+### Setting Up for Development
+
+1. Fork and clone the repository.
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Create a `.env.test` file in the root directory and add your Civitai API token, i.e., `CIVITAI_TOKEN`.
+
+### Running Tests
+
+To ensure your changes don't break existing functionality, run the tests:
+
+```bash
+npm run test
+```
+
+### Building from Source
+
+To build the project from source:
+
+```bash
+npm run build
+```
+
+This will compile the TypeScript files and generate the necessary JavaScript files in the `dist` directory.
+
+### Contributing Your Changes
+
+After making your changes:
+
+1. Push your changes to your fork.
+2. Open a pull request against the main repository.
+3. Describe your changes and how they improve the project or fix issues.
+
+Your contributions will be reviewed, and if accepted, merged into the project.
+
+### Additional Guidelines
+
+- Include unit tests for new features or bug fixes.
+- Update the documentation if necessary.
+
+Thank you for contributing to the Civitai Generator Node.js Client! 🥹🤭
