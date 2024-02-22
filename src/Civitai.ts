@@ -1,37 +1,51 @@
 import { JobsService } from "./services/JobsService";
 import { OpenAPI } from "./core/OpenAPI";
-import { TextToImageInput } from "./models/TextToImageInput";
-import { JobTemplateList } from "./models/JobTemplateList";
 
+// Interfaces for configuration and input types
 interface CivitaiConfig {
   auth: string;
 }
 
+// Main class for interacting with Civitai services
 class Civitai {
+  // Define the structure of image and job operations
   image: {
-    fromText: (input, wait?: boolean) => Promise<any>;
-    fromComfy: (input: any) => Promise<any>;
+    fromText: (
+      input: any,
+      wait?: boolean,
+      callbackUrl?: string
+    ) => Promise<any>;
+    fromComfy: (
+      input: any,
+      wait?: boolean,
+      callbackUrl?: string
+    ) => Promise<any>;
   };
   job: {
     get: (jobId: string) => Promise<any>;
+    cancel: (jobId: string) => Promise<any>;
   };
 
   constructor(config: CivitaiConfig) {
+    // Set authorization header for all API requests
     OpenAPI.HEADERS = {
       Authorization: `Bearer ${config.auth}`,
     };
 
+    // Image-related operations
     this.image = {
-      fromText: async (input, wait = true) => {
+      // Convert text to image, optionally waiting for job completion
+      fromText: async (input, wait = true, callbackUrl) => {
+        // Prepare job input with default values
         const jobInput = {
           $type: "textToImage",
           ...input,
           quantity: 1,
-          priority: {
-            value: 1,
-          },
+          priority: { value: 1 },
         };
         console.log(`Creating TextToImage job with input=`, jobInput);
+
+        // Submit job and process response
         const response = await JobsService.postV1ConsumerJobs(wait, jobInput);
         const modifiedResponse = {
           token: response.token,
@@ -43,38 +57,63 @@ class Civitai {
           })),
         };
 
-        // If wait is true, initiate extended polling
+        // If waiting for job completion, poll until job is done
         if (wait) {
-          console.log(`Waiting for job completion, token: ${response.token}`);
           try {
             const jobResult = await this.pollForJobCompletion(response.token);
             if (jobResult && modifiedResponse.jobs.length > 0) {
               modifiedResponse.jobs[0].result = jobResult;
             }
           } catch (error) {
-            console.error(`Error during job completion polling: ${error}`);
+            console.error(`${error}`);
           }
         }
 
         return modifiedResponse;
       },
-      fromComfy: async (input: any) => {
+
+      // Convert comfy input to output, not waiting for job completion
+      fromComfy: async (input, wait = true, callbackUrl) => {
         const jobInput = {
           $type: "comfy",
           ...input,
           quantity: 1,
-          priority: {
-            value: 1,
-          },
+          priority: { value: 1 },
         };
         console.log(`Creating ComfyUI job with input=`, jobInput);
-        return await JobsService.postV1ConsumerJobs(false, jobInput);
+
+        // Submit job and process response
+        const response = await JobsService.postV1ConsumerJobs(wait, jobInput);
+        const modifiedResponse = {
+          token: response.token,
+          jobs: response.jobs.map((job) => ({
+            jobId: job.jobId,
+            cost: job.cost,
+            result: job.result,
+            scheduled: job.scheduled,
+          })),
+        };
+
+        // If waiting for job completion, poll until job is done
+        if (wait) {
+          try {
+            const jobResult = await this.pollForJobCompletion(response.token);
+            if (jobResult && modifiedResponse.jobs.length > 0) {
+              modifiedResponse.jobs[0].result = jobResult;
+            }
+          } catch (error) {
+            console.error(`${error}`);
+          }
+        }
+
+        return modifiedResponse;
       },
     };
 
+    // Job-related operations
     this.job = {
+      // Fetch job status by token
       get: async (token: string) => {
-        console.log(`Fetching job status for token ${token}`);
         const fullResponse = await JobsService.getV1ConsumerJobs(token);
         const modifiedJobs = fullResponse.jobs?.map((job) => ({
           jobId: job.jobId,
@@ -82,39 +121,53 @@ class Civitai {
           result: job.result,
           scheduled: job.scheduled,
         }));
-        return {
-          jobs: modifiedJobs,
-        };
+        return { token, jobs: modifiedJobs };
+      },
+
+      // Cancel a job by jobId
+      cancel: async (jobId: string) => {
+        console.log(`Cancelling job with jobId ${jobId}`);
+        try {
+          await JobsService.deleteV1ConsumerJobs1(jobId, true); // force=true by default
+          return {
+            status: 200,
+            message: `Job ${jobId} cancelled successfully.`,
+          };
+        } catch (error) {
+          console.error(`Error cancelling job ${jobId}: ${error}`);
+          throw error;
+        }
       },
     };
   }
 
-  // Long polling for job completion with a timeout after 5 minutes
+  // Poll for job completion with a timeout
   async pollForJobCompletion(
     token: string,
-    interval: number = 30000,
-    timeout: number = 300000
+    interval: number = 30000, // Poll every 30 seconds
+    timeout: number = 600000 // Timeout after 10 minutes
   ): Promise<any> {
-    console.log(
-      `Polling for job completion for token ${token.slice(
-        0,
-        5
-      )}...${token.slice(-5)}`
-    );
     const startTime = Date.now();
 
     const checkJobStatus = async (): Promise<any> => {
+      // Check for timeout
       if (Date.now() - startTime > timeout) {
         throw new Error(`Polling timeout exceeded for token ${token}`);
       }
 
+      // Check job status
       const response = await this.job.get(token);
       const job = response.jobs && response.jobs[0];
       if (job && job.result && job.result.blobUrl) {
         console.log(`Job completed with blobUrl: ${job.result.blobUrl}`);
-        return job.result;
+        return response;
+      } else if (job && !job.scheduled) {
+        // If the job is not scheduled and there's no blobUrl, throw an error
+        throw new Error(
+          `Job ${job.jobId} is not scheduled and has no result. Stopping polling.`
+        );
       } else {
-        console.log(`Job not completed yet. Polling again...`);
+        console.log(`Job:`, JSON.stringify(response, null, 2));
         await new Promise((resolve) => setTimeout(resolve, interval));
         return checkJobStatus();
       }

@@ -4,7 +4,7 @@
     "rootDir": "src",
     "types": ["node", "jest"],
     "strict": true,
-    "sourceMap": true,
+    "sourceMap": false,
     "declaration": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,

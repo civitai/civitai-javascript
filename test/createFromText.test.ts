@@ -13,30 +13,31 @@ describe("Create FromText Job", () => {
 
   test("successfully creates a FromText job", async () => {
     const input = {
-      baseModel: "SDXL",
-      model: "urn:air:sd1:checkpoint:civitai:139562@344487",
+      baseModel: "SD_1_5",
+      model: "urn:air:sd1:checkpoint:civitai:107842@275408",
       params: {
         prompt:
-          "paparazzi photography  of of taylor swift, eyeliner, eyeshadow, long eyelashes, mascara, red lips, long blonde hair with fringe,   shot on Diana F+ high key lighting, in a warehouse, upper body, Fog , Hands By the Mouth Tunic,",
-        negativePrompt: "",
+          "masterpiece, best quality, 1girl, IncrsAhri, multiple tails, fox tail, korean clothes, skirt, braid, arms behind back, seductive smile",
+        negativePrompt:
+          "(worst quality:1.4), (low quality:1.4), simple background, bad anatomy",
         scheduler: "EulerA",
-        steps: 20,
+        steps: 25,
         cfgScale: 7,
         width: 512,
-        height: 512,
+        height: 768,
         seed: -1,
         clipSkip: 2,
       },
       additionalNetworks: {
-        "urn:air:sd1:lora:civitai:260037@293292": {
+        "urn:air:sd1:lora:civitai:162141@182559": {
           type: "Lora",
           strength: 1.0,
         },
       },
     };
+    // Long polling as we did not pass in `wait` parameter
     const output = await civitai.image.fromText(input);
     console.log("Response:", JSON.stringify(output, null, 2));
-    console.log("Result:", output.jobs[0].result);
     expect(output).toBeDefined();
-  }, 300000);
+  }, 600000);
 });

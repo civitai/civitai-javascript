@@ -54,7 +54,7 @@ const response = await civitai.image.fromText(input);
 const output = response.jobs[0].result;
 ```
 
-_Note: Jobs time out after 5 minutes._
+_Note: Jobs timeout after 5 minutes._
 
 Or wait for the job to finish by running the generation in the background a.k.a short polling:
 
