@@ -146,6 +146,122 @@ const response = await civitai.image.fromText(options);
 }
 ```
 
+## Webhooks
+
+Webhooks provide real-time updates about your generation. Specify an endpoint when you create a generation, and Civitai will send HTTP POST requests to that URL when the generation is completed.
+
+Some scenarios where webhooks are useful:
+
+- **Sending notifications when long-running generations finish**. Some predictions like training jobs can take several minutes to run. You can use a webhook handler to send a notification like an email or a Slack message when a prediction completes.
+- **Creating model pipelines.** You can use webhooks to capture the output of one long-running prediction and pipe it into another model as input.
+
+Note: Webhooks are handy, but they’re not strictly necessary to use Civitai SDK, and there are other ways to receive updates. You can also [poll the generation API]() check the status of a generation over time.
+
+### Setting webhooks
+
+To use webhooks, specify a `webhook URL` in the request body when creating a generation.
+Here’s an example using the Civitai JavaScript client:
+
+```js
+await civitai.image.fromText({
+  input: {
+    baseModel: "SD_1_5",
+    model: "urn:air:sd1:checkpoint:civitai:4384@128713",
+    params: {
+      prompt: "a cat in a field of flowers",
+      ...
+    },
+  }
+  callbackUrl: "https://example.com/webhook",
+});
+```
+
+### Receiving webhooks
+
+The request body is a generation object in JSON format. This object has the same structure as the object returned by the generation result API. Here’s an example of an unfinished generation:
+
+```json
+
+```
+
+Here’s an example of a Next.js webhook handler:
+
+```js
+// app/api/webhook/route.ts
+import { NextResponse } from "next/server";
+
+export async function POST(req: Request) {
+  try {
+    const data = await req.json();
+
+    if (data) {
+      return NextResponse.json(
+        {
+          success: true,
+          message: "Webhook received successfully",
+          data,
+        },
+        { status: 200 }
+      );
+    } else {
+      return new Response("Missing output", { status: 400 });
+    }
+  } catch (error) {
+    console.error("Error handling webhook data:", error);
+    return NextResponse.json(
+      { error: "Internal Server Error", message: error },
+      { status: 500 }
+    );
+  }
+}
+```
+
+By default, Civitai sends requests to your webhook URL whenever there are new outputs or the generation has finished.
+
+Your endpoint should respond with a 2xx status code within a few seconds, otherwise the webhook might be retried.
+
+### Testing your webhook code
+
+When writing the code for your new webhook handler, it’s useful to be able to receive real webhooks in your development environment so you can verify your code is handling them as expected.
+
+[ngrok](https://ngrok.com/) is a free reverse proxy tool that can create a secure tunnel to your local machine so you can receive webhooks. If you have Node.js installed, run ngrok directly from the command line using the npx command that’s included with Node.js.
+
+```bash!
+npx ngrok http 3000
+```
+
+The command above will generate output that looks like this:
+
+```bash
+Session Status                online
+Session Expires               1 hour, 59 minutes
+Version                       2.3.41
+Region                        United States (us)
+Web Interface                 http://127.0.0.1:4040
+Forwarding                    http://3e48-20-171-41-18.ngrok.io -> http://localhost:3000
+Forwarding                    https://3e48-20-171-41-18.ngrok.io -> http://localhost:3000
+```
+
+Here’s an example using the `civitai` JavaScript client:
+
+```js
+await civitai.image.fromText({
+  input: {
+    baseModel: "SD_1_5",
+    model: "urn:air:sd1:checkpoint:civitai:4384@128713",
+    params: {
+      prompt: "a cat in a field of flowers",
+      ...
+    },
+  }
+  callbackUrl: "https://example.com/webhook",
+});
+```
+
+Your webhook handler should now receive webhooks from Civitai. Once you’ve deployed your app, change the value of the webhook URL to your production webhook handler endpoint when creating generations.
+
+For a real-world example of webhook handling in Next.js, check out [the Nextjs ComfyUI example](https://github.com/civitai/civitai-javascript/tree/master/examples/nextjs-comfyui).
+
 ## Examples
 
 [Build a web app with Next.js App Router](https://github.com/civitai/civitai-javascript)
