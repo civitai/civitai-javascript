@@ -5,10 +5,12 @@ import Playground from "@/components/playground";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col mx-auto items-center p-24">
+    <main className="flex min-h-screen flex-col mx-auto items-center py-24 md:p-24">
       <Nav />
       <div className="flex flex-col items-center gap-10">
-        <h1 className="text-4xl font-bold">A Nextjs App with Civitai</h1>
+        <h1 className="text-4xl font-bold text-center">
+          A Nextjs App with Civitai
+        </h1>
         <CopyCommand />
       </div>
 

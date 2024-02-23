@@ -11,15 +11,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { toast } from "sonner";
-import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
-import { Label } from "./ui/label";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { SuccessIcon } from "./ui/success-icon";
 
 import { z } from "zod";
 import { usePlaygroundForm } from "@/hooks/use-form";
 import { cn, formSchema, pollJob } from "@/lib/utils";
+import { FormFields } from "./form-fields";
 
 export default function Playground() {
   const form = usePlaygroundForm();
@@ -33,11 +32,11 @@ export default function Playground() {
     setSubmitting(true);
     try {
       const input = {
-        model: "@civitai/130072",
+        baseModel: values.baseModel,
+        model: values.model,
         params: {
           prompt: values.prompt,
-          negativePrompt:
-            "(deformed iris, deformed pupils, semi-realistic, cgi, 3d, render, sketch, cartoon, drawing, anime, mutated hands and fingers:1.4), (deformed, distorted, disfigured:1.3), poorly drawn, bad anatomy, wrong anatomy, extra limb, missing limb, floating limbs, disconnected limbs, mutation, mutated, ugly, disgusting, amputation",
+          negativePrompt: values.negativePrompt,
           scheduler: "EulerA",
           steps: 20,
           cfgScale: 7,
@@ -84,32 +83,12 @@ export default function Playground() {
   }
 
   return (
-    <div className="flex flex-col gap-8 mx-auto px-8 md:px-0">
+    <div className="flex flex-col mx-auto px-8 md:px-0">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="grid md:grid-cols-2 gap-5">
+          <div className="grid md:grid-cols-2 gap-8">
             <div className="flex flex-col space-y-4">
-              <div className="flex flex-col space-y-2">
-                <Label htmlFor="input">Input</Label>
-                <FormField
-                  control={form.control}
-                  name="prompt"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <div className="textarea-container relative">
-                          <Textarea
-                            placeholder={"A cat"}
-                            className="flex-1 min-h-[150px] lg:min-h-[200px]"
-                            {...field}
-                          />
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+              <FormFields />
 
               <div className="flex flex-row items-center space-x-2">
                 <Button

@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
-  if (process.env.REPLICATE_WEBHOOK_SECRET) {
+  if (process.env.CIVITAI_WEBHOOK_SECRET) {
     // if a secret is set, verify it
     const secret = searchParams.get("secret") as string;
-    if (secret !== process.env.REPLICATE_WEBHOOK_SECRET) {
+    if (secret !== process.env.CIVITAI_WEBHOOK_SECRET) {
       return new Response("Invalid secret", { status: 401 });
     }
   }

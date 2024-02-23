@@ -7,6 +7,8 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export type FormValues = z.infer<typeof formSchema>;
+
 export const formSchema = z.object({
   prompt: z.string().min(1, {
     message: "Prompt is empty.",
@@ -19,24 +21,14 @@ export const nanoid = customAlphabet(
   7
 );
 
-export function pollJob(token: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const checkStatus = async () => {
-      try {
-        const response = await fetch(`/api/poll/${token}`);
-        const data = await response.json();
+export function formatBytes(bytes: number, decimals: number = 2): string {
+  if (bytes === 0) return "0 Bytes";
 
-        if (data.result && data.result[0] && data.result[0].imageUrl) {
-          resolve(data.result[0].imageUrl); // Resolve the promise with the imageUrl
-        } else {
-          // If the job is not yet done, poll again after some delay
-          setTimeout(checkStatus, 5000);
-        }
-      } catch (error) {
-        reject(error); // Reject the promise if there's an error
-      }
-    };
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
 
-    checkStatus();
-  });
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
 }

@@ -159,7 +159,6 @@ class Civitai {
       const response = await this.job.get(token);
       const job = response.jobs && response.jobs[0];
       if (job && job.result && job.result.blobUrl) {
-        console.log(`Job completed with blobUrl: ${job.result.blobUrl}`);
         return response;
       } else if (job && !job.scheduled) {
         // If the job is not scheduled and there's no blobUrl, throw an error

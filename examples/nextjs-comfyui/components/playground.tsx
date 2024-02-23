@@ -15,13 +15,17 @@ import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { SuccessIcon } from "./ui/success-icon";
+import { useRouter } from "next/navigation";
 
 import { z } from "zod";
 import { usePlaygroundForm } from "@/hooks/use-form";
-import { cn, formSchema, pollJob } from "@/lib/utils";
+import { FormValues, cn, formSchema } from "@/lib/utils";
 import { toast } from "sonner";
+import { generate } from "@/lib/actions";
+import Dropzone from "./dropzone";
 
 export default function Playground() {
+  const router = useRouter();
   const form = usePlaygroundForm();
 
   const [imageUrl, setImageUrl] = useState("");
@@ -29,53 +33,12 @@ export default function Playground() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [isSubmitting, setSubmitting] = useState(false);
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: FormValues) {
     setSubmitting(true);
     try {
-      const input = {
-        model: "@civitai/130072",
-        params: {
-          prompt: values.prompt,
-          negativePrompt:
-            "(deformed iris, deformed pupils, semi-realistic, cgi, 3d, render, sketch, cartoon, drawing, anime, mutated hands and fingers:1.4), (deformed, distorted, disfigured:1.3), poorly drawn, bad anatomy, wrong anatomy, extra limb, missing limb, floating limbs, disconnected limbs, mutation, mutated, ugly, disgusting, amputation",
-          scheduler: "EulerA",
-          steps: 20,
-          cfgScale: 7,
-          width: 512,
-          height: 512,
-          clipSkip: 2,
-        },
-      };
-      const response = await fetch("/api/generate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(input),
+      generate(values).then((id) => {
+        router.push(`/t/${id}`);
       });
-      const data = await response.json();
-      const token = data.token;
-
-      if (token) {
-        pollJob(token)
-          .then((imageUrl) => {
-            setImageUrl(imageUrl);
-            setIsSuccess(true);
-          })
-          .catch((error) => {
-            toast.error("Failed to generate image", {
-              description: error.message,
-            });
-          })
-          .finally(() => {
-            setSubmitting(false);
-            setTimeout(() => {
-              setIsSuccess(false);
-            }, 2000);
-          });
-      } else {
-        toast.error("Failed to generate image");
-      }
     } catch (error) {
       console.error("Error submitting form:", error);
       toast.error("Failed to generate image: " + error);
@@ -87,31 +50,11 @@ export default function Playground() {
     <div className="flex flex-col gap-8 mx-auto px-8 md:px-0">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="grid md:grid-cols-2 gap-5">
-            <div className="flex flex-col space-y-4">
-              <div className="flex flex-col space-y-2">
-                <Label htmlFor="input">Input</Label>
-                <FormField
-                  control={form.control}
-                  name="prompt"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <div className="textarea-container relative">
-                          <Textarea
-                            placeholder={"A cat"}
-                            className="flex-1 min-h-[150px] lg:min-h-[200px]"
-                            {...field}
-                          />
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="flex flex-col gap-5">
+              <Dropzone />
 
-              <div className="flex flex-row items-center space-x-2">
+              <div className="flex justify-end space-x-2">
                 <Button
                   disabled={isSubmitting}
                   className={cn(
