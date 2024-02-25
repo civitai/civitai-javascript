@@ -17,6 +17,24 @@ export const formSchema = z.object({
     message: "Prompt is empty.",
   }),
   negativePrompt: z.string().optional(),
+  scheduler: z.string().min(1, {
+    message: "Scheduler is empty.",
+  }),
+  steps: z.number().int().min(1, {
+    message: "Steps is empty.",
+  }),
+  cfgScale: z.number().int().min(1, {
+    message: "CfgScale is empty.",
+  }),
+  width: z.number().int().min(1, {
+    message: "Width is empty.",
+  }),
+  height: z.number().int().min(1, {
+    message: "Height is empty.",
+  }),
+  clipSkip: z.number().int().min(1, {
+    message: "ClipSkip is empty.",
+  }),
 });
 
 export function pollJob(token: string): Promise<string> {

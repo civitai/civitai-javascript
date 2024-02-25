@@ -1,19 +1,6 @@
 "use client";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  Expand,
-  File,
-  Loader2,
-  RotateCcw,
-  Trash2,
-  UploadCloud,
-} from "lucide-react";
+import { File, Loader2, RotateCcw, Trash2, UploadCloud } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
   Tooltip,
@@ -25,7 +12,7 @@ import {
 import useDragDrop from "@/hooks/use-drag-drop";
 import { cn, formatBytes } from "@/lib/utils";
 
-export default function UploadComponent() {
+export default function Dropzone() {
   const [file, setFile] = useState<File | null>(null);
   const [loadingState, setLoadingState] = useState<boolean>(false);
   const [fileDropError, setFileDropError] = useState<string>("");
@@ -38,10 +25,19 @@ export default function UploadComponent() {
 
     const selectedFile = e.dataTransfer.files[0];
 
-    if (!selectedFile || selectedFile.type !== "application/json") {
+    if (!selectedFile) {
+      return setFileDropError("No file selected.");
+    }
+
+    if (selectedFile.type !== "application/json") {
       return setFileDropError(
         "Invalid file type! Only JSON files are accepted."
       );
+    }
+
+    if (selectedFile.size > 102400) {
+      // 100KB in bytes
+      return setFileDropError("File size exceeds the maximum limit of 100KB.");
     }
 
     setFile(selectedFile);
@@ -51,10 +47,19 @@ export default function UploadComponent() {
   const fileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files ? e.target.files[0] : null;
 
-    if (!selectedFile || selectedFile.type !== "application/json") {
+    if (!selectedFile) {
+      return setFileDropError("No file selected.");
+    }
+
+    if (selectedFile.type !== "application/json") {
       return setFileDropError(
         "Invalid file type! Only JSON files are accepted."
       );
+    }
+
+    if (selectedFile.size > 102400) {
+      // 100KB in bytes
+      return setFileDropError("File size exceeds the maximum limit of 100KB.");
     }
 
     setFile(selectedFile);
@@ -85,16 +90,16 @@ export default function UploadComponent() {
 
   return (
     <>
-      <div className="dark:bg-neutral-800 bg-white border dark:border-neutral-700 w-full max-w-lg rounded-xl">
-        <div className="border-b dark:border-neutral-700">
-          <div className="flex flex-row justify-start items-center px-4 py-2 gap-2">
+      <div className="w-[350px] md:min-w-[400px] mb-4">
+        <div className="border-b">
+          <div className="flex flex-row justify-start items-center px-4 py-2.5 gap-2">
             <div className="rounded-full border p-2 flex flex-row justify-center items-center dark:border-neutral-700">
               <UploadCloud className="h-5 w-5 text-neutral-600" />
             </div>
-            <div>
-              <p className="font-semibold mb-0">Upload JSON file</p>
+            <div className="space-y-0.5">
+              <p className="font-semibold mb-0">Upload ComfyUI Workflow</p>
               <p className="text-sm text-neutral-500 -mt-1">
-                Drag and drop your JSON file. Will not be saved.
+                Drop your ComfyUI JSON API file. Will not be saved.
               </p>
             </div>
           </div>
@@ -105,7 +110,7 @@ export default function UploadComponent() {
           onDragLeave={onDragLeave}
           onDrop={onDrop}
           className={cn(
-            "px-4 py-2 border-[1.5px] border-dashed dark:border-neutral-700 m-2 rounded-xl flex flex-col justify-start items-center hover:cursor-pointer",
+            "px-4 py-2 border-[1.5px] border-dashed dark:border-neutral-700 m-4 rounded-lg flex flex-col justify-start items-center hover:cursor-pointer",
             dragOver && "border-blue-600 bg-blue-50"
           )}
         >
@@ -120,9 +125,9 @@ export default function UploadComponent() {
               Choose a file or drag & drop it here
             </p>
             <p className="text-neutral-500 text-sm">
-              Only JSON files. Up to 50 MB.
+              Only JSON files. Up to 100 KB.
             </p>
-            <div className="px-3 py-1 border dark:border-neutral-700 rounded-xl mt-4 mb-2 drop-shadow-sm hover:drop-shadow transition-all hover:cursor-pointer bg-white dark:bg-neutral-700">
+            <div className="px-3 py-1 border dark:border-neutral-700 rounded-lg mt-4 mb-2 drop-shadow-sm hover:drop-shadow transition-all hover:cursor-pointer bg-white dark:bg-neutral-700">
               Select file
             </div>
           </div>

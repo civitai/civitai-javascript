@@ -5,6 +5,7 @@ import { Inter as FontSans } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { Toaster } from "sonner";
 import { ThemeProvider } from "@/components/ui/theme-provider";
+import { TailwindIndicator } from "@/components/ui/tailwind-indicator";
 
 export const metadata: Metadata = {
   title: "Civitai Next.js App",
@@ -33,6 +34,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}
           <Toaster />
+          <TailwindIndicator />
         </ThemeProvider>
       </body>
     </html>

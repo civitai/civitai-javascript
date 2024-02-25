@@ -5,7 +5,7 @@ import { Sparkles } from "./ui/sparkles";
 
 export default async function Nav() {
   return (
-    <nav className="absolute top-5 right-10 flex items-center gap-1">
+    <nav className="absolute top-5 right-10 flex items-center gap-1 z-50">
       <ThemeToggle />
 
       <Link

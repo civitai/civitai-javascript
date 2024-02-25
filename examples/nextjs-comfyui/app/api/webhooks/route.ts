@@ -1,6 +1,10 @@
+import { useSearchParams } from "next/navigation";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
+  const searchParams = new URL(req.url).searchParams;
+  const id = searchParams.get("id") as string;
+
   if (process.env.CIVITAI_WEBHOOK_SECRET) {
     // if a secret is set, verify it
     const secret = searchParams.get("secret") as string;

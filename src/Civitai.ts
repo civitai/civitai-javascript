@@ -10,16 +10,8 @@ interface CivitaiConfig {
 class Civitai {
   // Define the structure of image and job operations
   image: {
-    fromText: (
-      input: any,
-      wait?: boolean,
-      callbackUrl?: string
-    ) => Promise<any>;
-    fromComfy: (
-      input: any,
-      wait?: boolean,
-      callbackUrl?: string
-    ) => Promise<any>;
+    fromText: (input: any, wait?: boolean, webhook?: string) => Promise<any>;
+    fromComfy: (input: any, wait?: boolean, webhook?: string) => Promise<any>;
   };
   job: {
     get: (jobId: string) => Promise<any>;
@@ -35,11 +27,12 @@ class Civitai {
     // Image-related operations
     this.image = {
       // Convert text to image, optionally waiting for job completion
-      fromText: async (input, wait = true, callbackUrl) => {
+      fromText: async (input, wait = true, webhook) => {
         // Prepare job input with default values
         const jobInput = {
           $type: "textToImage",
           ...input,
+          callbackUrl: webhook,
           quantity: 1,
           priority: { value: 1 },
         };
@@ -73,10 +66,11 @@ class Civitai {
       },
 
       // Convert comfy input to output, not waiting for job completion
-      fromComfy: async (input, wait = true, callbackUrl) => {
+      fromComfy: async (input, wait = true, webhook) => {
         const jobInput = {
           $type: "comfy",
           ...input,
+          callbackUrl: webhook,
           quantity: 1,
           priority: { value: 1 },
         };

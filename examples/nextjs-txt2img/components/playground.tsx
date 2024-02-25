@@ -37,12 +37,12 @@ export default function Playground() {
         params: {
           prompt: values.prompt,
           negativePrompt: values.negativePrompt,
-          scheduler: "EulerA",
-          steps: 20,
-          cfgScale: 7,
-          width: 512,
-          height: 512,
-          clipSkip: 2,
+          scheduler: values.scheduler,
+          steps: values.steps,
+          cfgScale: values.cfgScale,
+          width: values.width,
+          height: values.height,
+          clipSkip: values.clipSkip,
         },
       };
       const response = await fetch("/api/generate", {

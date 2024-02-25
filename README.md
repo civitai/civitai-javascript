@@ -155,7 +155,7 @@ Some scenarios where webhooks are useful:
 - **Sending notifications when long-running generations finish**. Some predictions like training jobs can take several minutes to run. You can use a webhook handler to send a notification like an email or a Slack message when a prediction completes.
 - **Creating model pipelines.** You can use webhooks to capture the output of one long-running prediction and pipe it into another model as input.
 
-Note: Webhooks are handy, but they’re not strictly necessary to use Civitai SDK, and there are other ways to receive updates. You can also [poll the generation API]() check the status of a generation over time.
+Note: Webhooks are handy, but they’re not strictly necessary to use Civitai SDK, and there are other ways to receive updates. You can also poll the generation API check the status of a generation over time.
 
 ### Setting webhooks
 
@@ -171,8 +171,8 @@ await civitai.image.fromText({
       prompt: "a cat in a field of flowers",
       ...
     },
+    callbackUrl: "https://example.com/webhook",
   }
-  callbackUrl: "https://example.com/webhook",
 });
 ```
 
@@ -253,8 +253,8 @@ await civitai.image.fromText({
       prompt: "a cat in a field of flowers",
       ...
     },
+    callbackUrl: "https://3e48-20-171-41-18.ngrok.io/api/webhooks",
   }
-  callbackUrl: "https://example.com/webhook",
 });
 ```
 
