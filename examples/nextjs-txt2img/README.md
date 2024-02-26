@@ -1,8 +1,12 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<img width="1619" alt="txt2img demo" src="https://github.com/civitai/civitai-javascript/assets/34775928/75df7220-9e46-4167-bf65-63cbdce546c8">
 
 ## Getting Started
+First, set up the environment variable:
+```
+CIVITAI_TOKEN=
+```
 
-First, run the development server:
+Run the development server:
 
 ```bash
 npm run dev
