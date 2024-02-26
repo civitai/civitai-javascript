@@ -10,7 +10,7 @@ CIVITAI_TOKEN=
 ## (optional, but recommended) Generate a random secret for the webhook: https://generate-secret.vercel.app/32
 CIVITAI_WEBHOOK_SECRET=
 ```
-
+Run the development server:
 ```bash
 npm run dev
 # or
