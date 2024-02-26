@@ -1,7 +1,7 @@
 <img width="1619" alt="txt2img demo" src="https://github.com/civitai/civitai-javascript/assets/34775928/75df7220-9e46-4167-bf65-63cbdce546c8">
 
 ## Getting Started
-First, set up the environment variable:
+First, set up the environment variable in `.env`:
 ```
 CIVITAI_TOKEN=
 ```
