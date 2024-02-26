@@ -77,6 +77,8 @@ The SDK supports additional networks: LoRA, VAE, Hypernetwork, Textual Inversion
 To use any of the networks availabe on Civitai, simply the `additionNetworks` field into the input:
 
 ```js
+import { Scheduler, AssetType } from "civitai";
+
 const input = {
   baseModel: "SD_1_5",
   model: "urn:air:sd1:checkpoint:civitai:107842@275408",
@@ -85,7 +87,7 @@ const input = {
       "masterpiece, best quality, 1girl, IncrsAhri, multiple tails, fox tail, korean clothes, skirt, braid, arms behind back, seductive smile",
     negativePrompt:
       "(worst quality:1.4), (low quality:1.4), simple background, bad anatomy",
-    scheduler: "EulerA",
+    scheduler: Scheduler.EULER_A,
     steps: 25,
     cfgScale: 7,
     width: 512,
@@ -96,7 +98,7 @@ const input = {
   // Add this `additionalNetworks` field
   additionalNetworks: {
     "urn:air:sd1:lora:civitai:162141@182559": {
-      type: "Lora",
+      type: AssetType.LORA,
       strength: 1.0,
     },
   },
@@ -167,7 +169,7 @@ const response = await civitai.image.fromText(options);
 | `additionalNetworks`    | [ImageJobNetworkParams](src/models/ImageJobNetworkParams.ts) \| null  | Optional. An associative list of additional networks, keyed by the AIR of the network. Each network is of type [AssetType](src/models/AssetType.ts).                                                                                                                                                                                      |
 | `controlNets`           | Array[<ImageJobControlNet>](src/models/ImageJobControlNet.ts) \| null | Optional. An associative list of additional networks.                                                                                                                                                                                                                                                                                     |
 
-### Additional Networks
+#### Additional Networks
 
 | `additionalNetworks` | Record<string, [ImageJobNetworkParams](src/models/ImageJobNetworkParams.ts)> | Optional. An associative list of additional networks, keyed by the AIR of the network. Each network is described by an `ImageJobNetworkParams` object. |
 | -------------------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -175,7 +177,7 @@ const response = await civitai.image.fromText(options);
 | `strength`           | number                                                                       | Optional. In case of Lora and LoCon, set the strength of the network.                                                                                  |
 | `triggerWord`        | string                                                                       | Optional. In case of a TextualInversion, set the trigger word of the network.                                                                          |
 
-### ControlNets
+#### ControlNets
 
 | `controlNets`  | Array<[ImageJobControlNet](src/models/ImageJobControlNet.ts)> | Optional. An array of control networks that can be applied to the image generation process. <br/><br/>Each `ImageJobControlNet` object in the array can have the following properties: |
 | -------------- | ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -198,6 +200,51 @@ const response = await civitai.image.fromText(options);
       "scheduled": true
     }
   ]
+}
+```
+
+### `civitai.job.cancel`
+
+Cancel a job by its jobId.
+
+```js
+const response = await civitai.job.cancel(jobId);
+```
+
+This method cancels a job that is currently scheduled or running. It requires the `jobId` of the job you wish to cancel. On successful cancellation, it returns a response object indicating the cancellation status.
+
+Example response:
+
+```js
+{
+  "status": 200,
+}
+
+```
+
+### `civitai.models.get`
+
+To check the coverage of specific models, you can use the `civitai.models.get` method. This method retrieves the availability of the requested models.
+
+```js
+const models = [
+  "urn:air:sd1:checkpoint:civitai:107842@275408",
+  "urn:air:sd1:lora:civitai:162141@182559",
+];
+const coverage = await civitai.models.get(models);
+console.log("Model coverage: ", coverage);
+```
+
+```
+Model Coverage: {
+  "urn:air:sd1:checkpoint:civitai:107842@275408": {
+    "availability": "Unavailable",
+    "workers": 0
+  },
+  "urn:air:sd1:lora:civitai:162141@182559": {
+    "availability": "Available",
+    "workers": 1
+  }
 }
 ```
 
@@ -313,7 +360,8 @@ For a real-world example of webhook handling in Next.js, check out [the Nextjs C
 
 ## Examples
 
-[Build a web app with Next.js App Router](https://github.com/civitai/civitai-javascript)
+[Build a web app with Next.js App Router](https://github.com/civitai/civitai-javascript/tree/master/examples/nextjs-txt2img)
+[Build a ComfyUI app](https://github.com/civitai/civitai-javascript/tree/master/examples/nextjs-comfyui)
 
 ## Contribution
 
@@ -333,16 +381,6 @@ Contributions to the Civitai Generator Node.js Client are welcome! Here's how yo
 npm install
 ```
 
-3. Create a `.env.test` file in the root directory and add your Civitai API token, i.e., `CIVITAI_TOKEN`.
-
-### Running Tests
-
-To ensure your changes don't break existing functionality, run the tests:
-
-```bash
-npm run test
-```
-
 ### Building from Source
 
 To build the project from source:
@@ -352,6 +390,16 @@ npm run build
 ```
 
 This will compile the TypeScript files and generate the necessary JavaScript files in the `dist` directory.
+
+3. Create a `.env.test` file in the root directory and add your Civitai API token, i.e., `CIVITAI_TOKEN`.
+
+### Running Tests
+
+To ensure your changes don't break existing functionality, run the tests:
+
+```bash
+npm run test
+```
 
 ### Contributing Your Changes
 

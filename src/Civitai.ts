@@ -1,5 +1,11 @@
 import { JobsService } from "./services/JobsService";
 import { OpenAPI } from "./core/OpenAPI";
+import { AIR } from "./models/AIR";
+import { ProviderAssetAvailability } from "./models/ProviderAssetAvailability";
+import { JobStatusCollection } from "./models/JobStatusCollection";
+import { CoverageService } from "./services/CoverageService";
+import { ProblemDetails } from "./models/ProblemDetails";
+
 import { fromTextSchema } from "./validation/ValidationSchemas";
 import {
   CivitaiConfig,
@@ -11,12 +17,23 @@ import {
 class Civitai {
   // Define the structure of image and job operations
   image: {
-    fromText: (input: FromTextInput, wait?: boolean) => Promise<any>;
-    fromComfy: (input: FromComfyInput, wait?: boolean) => Promise<any>;
+    fromText: (
+      input: FromTextInput,
+      wait?: boolean
+    ) => Promise<JobStatusCollection | ProblemDetails | any>;
+    fromComfy: (
+      input: FromComfyInput,
+      wait?: boolean
+    ) => Promise<JobStatusCollection | ProblemDetails | any>;
   };
   job: {
-    get: (jobId: string) => Promise<any>;
+    get: (jobId: string) => Promise<JobStatusCollection | any>;
     cancel: (jobId: string) => Promise<any>;
+  };
+  models: {
+    get: (
+      model: Array<AIR | string>
+    ) => Promise<Record<string, ProviderAssetAvailability>>;
   };
 
   constructor(config: CivitaiConfig) {
@@ -27,7 +44,7 @@ class Civitai {
 
     // Image-related operations
     this.image = {
-      // Convert text to image, optionally waiting for job completion
+      // Convert text to image, optionally not waiting for job completion
       fromText: async (input, wait = false) => {
         // Runtime validation
         const { error } = fromTextSchema.validate(input);
@@ -72,8 +89,8 @@ class Civitai {
         return modifiedResponse;
       },
 
-      // Convert comfy input to output, not waiting for job completion
-      fromComfy: async (input, wait = true) => {
+      // Convert comfy input to output, optionally not waiting for job completion
+      fromComfy: async (input, wait = false) => {
         const jobInput = {
           $type: "comfy",
           ...input,
@@ -108,6 +125,22 @@ class Civitai {
         }
 
         return modifiedResponse;
+      },
+    };
+
+    this.models = {
+      // Get coverage of particular models
+      get: async (model) => {
+        console.log(`Fetching coverage for models:`, model);
+        try {
+          const coverage = await CoverageService.getV1ConsumerCoverage(
+            model as AIR[]
+          );
+          return coverage;
+        } catch (error) {
+          console.error(`Error fetching model coverage: ${error}`);
+          throw error;
+        }
       },
     };
 
