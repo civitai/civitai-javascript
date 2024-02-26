@@ -1,17 +1,85 @@
+import Joi from "joi";
+
 import { JobsService } from "./services/JobsService";
 import { OpenAPI } from "./core/OpenAPI";
+import type { Scheduler } from "./models/Scheduler";
+import type { ImageJobNetworkParams } from "./models/ImageJobNetworkParams";
+import { ImageJobControlNet } from "./models/ImageJobControlNet";
 
 // Interfaces for configuration and input types
 interface CivitaiConfig {
   auth: string;
 }
 
+type fromComfyInput = { params?: Record<string, any> | null };
+
+type FromTextInput = {
+  baseModel?: string;
+  model: string;
+  params: {
+    prompt: string;
+    negativePrompt?: string;
+    scheduler?: Scheduler;
+    steps?: number;
+    cfgScale?: number;
+    width: number;
+    height: number;
+    seed?: number;
+    clipSkip?: number;
+  };
+  additionalNetworks: {
+    [key: string]: ImageJobNetworkParams;
+  };
+  controlNets?: ImageJobControlNet[];
+  callbackUrl?: string;
+};
+
+// Joi schema for runtime validation
+const controlNetSchema = Joi.object({
+  preprocessor: Joi.string()
+    .valid("Canny", "DepthZoe", "SoftedgePidinet", "Rembg")
+    .optional(),
+  weight: Joi.number().optional(),
+  startStep: Joi.number().optional(),
+  endStep: Joi.number().optional(),
+  blobKey: Joi.string().allow(null).optional(),
+  imageUrl: Joi.string().allow(null).optional(),
+});
+
+const fromTextSchema = Joi.object({
+  baseModel: Joi.string().optional(),
+  model: Joi.string().required(),
+  params: Joi.object({
+    prompt: Joi.string().required(),
+    negativePrompt: Joi.string().optional(),
+    scheduler: Joi.string().optional(),
+    steps: Joi.number().optional(),
+    cfgScale: Joi.number().optional(),
+    width: Joi.number().required(),
+    height: Joi.number().required(),
+    seed: Joi.number().optional(),
+    clipSkip: Joi.number().optional(),
+  }).required(),
+  additionalNetworks: Joi.object()
+    .pattern(
+      Joi.string(),
+      Joi.object({
+        type: Joi.string().required(),
+        strength: Joi.number().optional(),
+        triggerWord: Joi.string().optional(),
+      })
+    )
+    .optional(),
+  controlNets: Joi.array().items(controlNetSchema).optional(),
+  callbackUrl: Joi.string().optional(),
+});
+
 // Main class for interacting with Civitai services
 class Civitai {
   // Define the structure of image and job operations
   image: {
-    fromText: (input: any, wait?: boolean, webhook?: string) => Promise<any>;
-    fromComfy: (input: any, wait?: boolean, webhook?: string) => Promise<any>;
+    fromText: (input: FromTextInput, wait?: boolean) => Promise<any>;
+    fromComfy: (input: fromComfyInput, wait?: boolean) => Promise<any>;
   };
   job: {
     get: (jobId: string) => Promise<any>;
@@ -27,18 +95,24 @@ class Civitai {
     // Image-related operations
     this.image = {
       // Convert text to image, optionally waiting for job completion
-      fromText: async (input, wait = true, webhook) => {
+      fromText: async (input, wait = false) => {
+        // Runtime validation
+        const { error } = fromTextSchema.validate(input);
+        if (error) {
+          throw new Error(`Validation error: ${error.message}`);
+        }
+
         // Prepare job input with default values
         const jobInput = {
           $type: "textToImage",
           ...input,
-          callbackUrl: webhook,
           quantity: 1,
           priority: { value: 1 },
         };
         console.log(`Creating TextToImage job with input=`, jobInput);
 
         // Submit job and process response
+        // @ts-ignore
         const response = await JobsService.postV1ConsumerJobs(wait, jobInput);
         const modifiedResponse = {
           token: response.token,
@@ -66,17 +140,17 @@ class Civitai {
       },
 
       // Convert comfy input to output, not waiting for job completion
-      fromComfy: async (input, wait = true, webhook) => {
+      fromComfy: async (input, wait = true) => {
         const jobInput = {
           $type: "comfy",
           ...input,
-          callbackUrl: webhook,
           quantity: 1,
           priority: { value: 1 },
         };
         console.log(`Creating ComfyUI job with input=`, jobInput);
 
         // Submit job and process response
+        // @ts-ignore
         const response = await JobsService.postV1ConsumerJobs(wait, jobInput);
         const modifiedResponse = {
           token: response.token,

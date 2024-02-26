@@ -1,10 +1,7 @@
 import Footer from "@/components/footer";
 import Nav from "@/components/nav";
-import CopyCommand from "@/components/copy-command";
 import Playground from "@/components/playground";
 import { Gemini } from "@/components/ui/gemini-effect";
-import { PinContainer } from "@/components/ui/3d-pin";
-import Dropzone from "@/components/dropzone";
 
 export default function Home() {
   return (

@@ -7,7 +7,6 @@ import { Form } from "@/components/ui/form";
 import { Button } from "./ui/button";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { SuccessIcon } from "./ui/success-icon";
-import { useRouter } from "next/navigation";
 
 import { usePlaygroundForm } from "@/hooks/use-form";
 import { FormValues, cn, formSchema } from "@/lib/utils";
@@ -17,7 +16,6 @@ import Dropzone from "./dropzone";
 import { PinContainer } from "./ui/3d-pin";
 
 export default function Playground() {
-  const router = useRouter();
   const form = usePlaygroundForm();
 
   const [imageUrl, setImageUrl] = useState("");
@@ -28,8 +26,9 @@ export default function Playground() {
   async function onSubmit(values: FormValues) {
     setSubmitting(true);
     try {
-      generate(values).then((id) => {
-        router.push(`/t/${id}`);
+      const jsonContent = values.jsonContent;
+      generate(jsonContent).then((id) => {
+        setImageUrl(`/api/image/${id}`); // TODO: Use the correct URL
       });
     } catch (error) {
       console.error("Error submitting form:", error);

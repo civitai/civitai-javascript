@@ -1,4 +1,6 @@
 import Civitai from "../dist/Civitai";
+import { AssetType } from "../dist/models/AssetType";
+import { Scheduler } from "../dist/models/Scheduler";
 import dotenv from "dotenv";
 dotenv.config({ path: ".env.test" });
 
@@ -20,7 +22,7 @@ describe("Create FromText Job", () => {
           "masterpiece, best quality, 1girl, IncrsAhri, multiple tails, fox tail, korean clothes, skirt, braid, arms behind back, seductive smile",
         negativePrompt:
           "(worst quality:1.4), (low quality:1.4), simple background, bad anatomy",
-        scheduler: "EulerA",
+        scheduler: Scheduler.EULER_A,
         steps: 25,
         cfgScale: 7,
         width: 512,
@@ -30,10 +32,11 @@ describe("Create FromText Job", () => {
       },
       additionalNetworks: {
         "urn:air:sd1:lora:civitai:162141@182559": {
-          type: "Lora",
+          type: AssetType.LORA,
           strength: 1.0,
         },
       },
+      callbackUrl: "https://4a1e-104-222-28-153.ngrok-free.app/api/webhook",
     };
     // Long polling as we did not pass in `wait` parameter
     const output = await civitai.image.fromText(input);

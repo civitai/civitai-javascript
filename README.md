@@ -29,6 +29,8 @@ const civitai = new Civitai({
 #### Create a txt2img job:
 
 ```js
+import { Scheduler } from "civitai";
+
 const input = {
   baseModel: "SDXL",
   model: "@civitai/128713",
@@ -37,7 +39,7 @@ const input = {
       "instagram photo, closeup face photo of 23 y.o Chloe in black sweater, cleavage, pale skin, (smile:0.4), hard shadows",
     negativePrompt:
       "(deformed iris, deformed pupils, semi-realistic, cgi, 3d, render, sketch, cartoon, drawing, anime, mutated hands and fingers:1.4), (deformed, distorted, disfigured:1.3)",
-    scheduler: "EulerA",
+    scheduler: Scheduler.EULER_A,
     steps: 20,
     cfgScale: 7,
     width: 512,
@@ -67,6 +69,41 @@ Then fetch the result later:
 ```js
 const output = civitai.job.get(response.token);
 ```
+
+### Using Additional Networks
+
+The SDK supports additional networks: LoRA, VAE, Hypernetwork, Textual Inversion, LyCORIS, Checkpoint, and LoCon. See the full list [here](src/models/AssetType.ts).
+
+To use any of the networks availabe on Civitai, simply the `additionNetworks` field into the input:
+
+```js
+const input = {
+  baseModel: "SD_1_5",
+  model: "urn:air:sd1:checkpoint:civitai:107842@275408",
+  params: {
+    prompt:
+      "masterpiece, best quality, 1girl, IncrsAhri, multiple tails, fox tail, korean clothes, skirt, braid, arms behind back, seductive smile",
+    negativePrompt:
+      "(worst quality:1.4), (low quality:1.4), simple background, bad anatomy",
+    scheduler: "EulerA",
+    steps: 25,
+    cfgScale: 7,
+    width: 512,
+    height: 768,
+    seed: -1,
+    clipSkip: 2,
+  },
+  // Add this `additionalNetworks` field
+  additionalNetworks: {
+    "urn:air:sd1:lora:civitai:162141@182559": {
+      type: "Lora",
+      strength: 1.0,
+    },
+  },
+};
+```
+
+In the case of `Lora` and `LoCon` networks, set the `strength` of the network; for `TextualInversion`, set the `triggerWord` of the network.
 
 <br/>
 
@@ -113,21 +150,39 @@ Run a model with inputs you provide.
 const response = await civitai.image.fromText(options);
 ```
 
-| name                    | type                                 | description                                                                                  |
-| ----------------------- | ------------------------------------ | -------------------------------------------------------------------------------------------- |
-| `baseModel`             | enum `"SD_1_5"`, `"SDXL"`            | **Required**. Base Stable Diffusion Model.                                                   |
-| `model`                 | string \| null                       | **Required**. The Civitai model to use for generation.                                       |
-| `params.prompt`         | string \| null                       | **Required**. The main prompt for the image generation.                                      |
-| `params.negativePrompt` | string \| null                       | **Required**. The negative prompt for the image generation.                                  |
-| `params.scheduler`      | [Scheduler](src/models/Scheduler.ts) | **Required**. The scheduler algorithm to use.                                                |
-| `params.steps`          | number                               | **Required**. The number of steps for the image generation process.                          |
-| `params.cfgScale`       | number                               | **Required**. The CFG scale for the image generation.                                        |
-| `params.width`          | number                               | **Required**. The width of the generated image.                                              |
-| `params.height`         | number                               | **Required**. The height of the generated image.                                             |
-| `params.seed`           | number                               | **Required**. The seed for the image generation process.                                     |
-| `params.clipSkip`       | number                               | **Required**. The number of CLIP skips for the image generation.                             |
-| `additionalNetworks`    | object \| null                       | Optional. An associative list of additional networks. Use the AIR of the network as the key. |
-| `controlNets`           | array \| null                        | Optional. An associative list of additional networks.                                        |
+| name                    | type                                                                  | description                                                                                                                                                                                                                                                                                                                               |
+| ----------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `baseModel`             | enum `"SD_1_5"`, `"SDXL"`                                             | **Required**. Base Stable Diffusion Model.                                                                                                                                                                                                                                                                                                |
+| `model`                 | string \| null                                                        | **Required**. The Civitai model to use for generation.                                                                                                                                                                                                                                                                                    |
+| `params.prompt`         | string \| null                                                        | **Required**. The main prompt for the image generation.                                                                                                                                                                                                                                                                                   |
+| `params.negativePrompt` | string \| null                                                        | Optional. The negative prompt for the image generation.                                                                                                                                                                                                                                                                                   |
+| `params.scheduler`      | [Scheduler](src/models/Scheduler.ts) \| null                          | Optional. The scheduler algorithm to use. <br/> <br/>Possible values are: `EulerA`, `Euler`, `LMS`, `Heun`, `DPM2`, `DPM2A`, `DPM2SA`, `DPM2M`, `DPMSDE`, `DPMFast`, `DPMAdaptive`, `LMSKarras`, `DPM2Karras`, `DPM2AKarras`, `DPM2SAKarras`, `DPM2MKarras`, `DPMSDEKarras`, `DDIM`, `PLMS`, `UniPC`, `Undefined`, `LCM`, `DDPM`, `DEIS`. |
+| `params.steps`          | number \| null                                                        | Optional. The number of steps for the image generation process.                                                                                                                                                                                                                                                                           |
+| `params.cfgScale`       | number \| null                                                        | Optional. The CFG scale for the image generation.                                                                                                                                                                                                                                                                                         |
+| `params.width`          | number                                                                | **Required**. The width of the generated image.                                                                                                                                                                                                                                                                                           |
+| `params.height`         | number                                                                | **Required**. The height of the generated image.                                                                                                                                                                                                                                                                                          |
+| `params.seed`           | number \| null                                                        | Optional. The seed for the image generation process.                                                                                                                                                                                                                                                                                      |
+| `params.clipSkip`       | number \| null                                                        | Optional. The number of CLIP skips for the image generation.                                                                                                                                                                                                                                                                              |
+| `callbackUrl`           | string \| null                                                        | Optional. URL that will be invoked upon completion of this job                                                                                                                                                                                                                                                                            |
+| `additionalNetworks`    | [ImageJobNetworkParams](src/models/ImageJobNetworkParams.ts) \| null  | Optional. An associative list of additional networks, keyed by the AIR of the network. Each network is of type [AssetType](src/models/AssetType.ts).                                                                                                                                                                                      |
+| `controlNets`           | Array[<ImageJobControlNet>](src/models/ImageJobControlNet.ts) \| null | Optional. An associative list of additional networks.                                                                                                                                                                                                                                                                                     |
+
+### Additional Networks
+
+| `additionalNetworks` | Record<string, [ImageJobNetworkParams](src/models/ImageJobNetworkParams.ts)> | Optional. An associative list of additional networks, keyed by the AIR of the network. Each network is described by an `ImageJobNetworkParams` object. |
+| -------------------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `type`               | [`AssetType`](src/models/AssetType.ts)                                       | Optional. The type of the asset. <br/><br/>Can be one of `Lora`, `Hypernetwork`, `TextualInversion`, `Lycoris`, `Checkpoint`, `Vae`, `LoCon`.          |
+| `strength`           | number                                                                       | Optional. In case of Lora and LoCon, set the strength of the network.                                                                                  |
+| `triggerWord`        | string                                                                       | Optional. In case of a TextualInversion, set the trigger word of the network.                                                                          |
+
+### ControlNets
+
+| `controlNets`  | Array<[ImageJobControlNet](src/models/ImageJobControlNet.ts)> | Optional. An array of control networks that can be applied to the image generation process. <br/><br/>Each `ImageJobControlNet` object in the array can have the following properties: |
+| -------------- | ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `preprocessor` | [ImageTransformer](src/models/ImageTransformer.ts) \| null    | Optional. Specifies the image transformer to be applied as a preprocessor. <br/><br/>Possible values are `Canny`, `DepthZoe`, `SoftedgePidinet`, `Rembg`.                              |
+| `weight`       | number \| null                                                | Optional. The weight of the control net.                                                                                                                                               |
+| `startStep`    | number \| null                                                | Optional. The step at which the control net starts to apply.                                                                                                                           |
+| `endStep`      | number \| null                                                | Optional. The step at which the control net stops applying.                                                                                                                            |
 
 ```json
 {
@@ -171,18 +226,12 @@ await civitai.image.fromText({
       prompt: "a cat in a field of flowers",
       ...
     },
-    callbackUrl: "https://example.com/webhook",
+    webhook: "https://example.com/webhook",
   }
 });
 ```
 
 ### Receiving webhooks
-
-The request body is a generation object in JSON format. This object has the same structure as the object returned by the generation result API. Here’s an example of an unfinished generation:
-
-```json
-
-```
 
 Here’s an example of a Next.js webhook handler:
 
@@ -253,7 +302,7 @@ await civitai.image.fromText({
       prompt: "a cat in a field of flowers",
       ...
     },
-    callbackUrl: "https://3e48-20-171-41-18.ngrok.io/api/webhooks",
+    webhook: "https://3e48-20-171-41-18.ngrok.io/api/webhooks",
   }
 });
 ```

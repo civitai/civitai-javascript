@@ -10,9 +10,7 @@ export function cn(...inputs: ClassValue[]) {
 export type FormValues = z.infer<typeof formSchema>;
 
 export const formSchema = z.object({
-  prompt: z.string().min(1, {
-    message: "Prompt is empty.",
-  }),
+  jsonContent: z.string().optional(),
 });
 
 // 7-character random string

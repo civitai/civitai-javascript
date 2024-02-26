@@ -1,41 +1,30 @@
 "use server";
 
 import { Civitai } from "civitai";
-import { FormValues, nanoid } from "./utils";
+import { nanoid } from "./utils";
 import { WEBHOOK_URL } from "./constants";
+import fs from "fs/promises"; // Use the Promise-based version of fs
 
 const civitai = new Civitai({
-  auth: process.env.CIVITAI_API_TOKEN as string,
+  auth: process.env.CIVITAI_TOKEN as string,
 });
 
-export async function generate(values: FormValues) {
-  console.log("Generating image with values:", values);
-  const prompt = values.prompt;
-
+export async function generate(jsonContent: string) {
   const id = nanoid();
 
-  const res = await civitai.image.fromText({
-    baseModel: "SD_1_5",
-    model: "urn:air:sd1:checkpoint:civitai:4201@130072",
+  console.log("jsonContent", jsonContent);
+
+  const res = await civitai.image.fromComfy({
     params: {
-      prompt:
-        "instagram photo, closeup face photo of 23 y.o Chloe in black sweater, cleavage, pale skin, (smile:0.4), hard shadows",
-      negativePrompt:
-        "(worst quality:1.4), (low quality:1.4), simple background, bad anatomy",
-      scheduler: "EulerA",
-      steps: 20,
-      cfgScale: 7,
-      width: 512,
-      height: 512,
-      clipSkip: 2,
+      workflow: JSON.parse(jsonContent), // Workflow JSON
     },
-    webhook: `${WEBHOOK_URL}?id=${id}${
+    callbackUrl: `${WEBHOOK_URL}?id=${id}${
       process.env.CIVITAI_WEBHOOK_SECRET
         ? `&secret=${process.env.CIVITAI_WEBHOOK_SECRET}`
         : ""
     }`,
   });
-  console.log(res);
+  console.log("Res", res);
 
   return id;
 }

@@ -11,8 +11,11 @@ import {
 
 import useDragDrop from "@/hooks/use-drag-drop";
 import { cn, formatBytes } from "@/lib/utils";
+import { usePlaygroundForm } from "@/hooks/use-form";
 
 export default function Dropzone() {
+  const form = usePlaygroundForm();
+
   const [file, setFile] = useState<File | null>(null);
   const [loadingState, setLoadingState] = useState<boolean>(false);
   const [fileDropError, setFileDropError] = useState<string>("");
@@ -42,6 +45,15 @@ export default function Dropzone() {
 
     setFile(selectedFile);
     setFileDropError("");
+    // Read the file's contents
+    const reader = new FileReader();
+    reader.onload = async (ev) => {
+      // @ts-ignore
+      const text = ev.target.result;
+      // Assuming `text` is the JSON content you want to set
+      form.setValue("jsonContent", text?.toString() ?? "");
+    };
+    reader.readAsText(selectedFile);
   };
 
   const fileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,6 +76,16 @@ export default function Dropzone() {
 
     setFile(selectedFile);
     setFileDropError("");
+
+    // Read the file's contents
+    const reader = new FileReader();
+    reader.onload = async (ev) => {
+      // @ts-ignore
+      const text = ev.target.result;
+      // Assuming `text` is the JSON content you want to set
+      form.setValue("jsonContent", text?.toString() ?? "");
+    };
+    reader.readAsText(selectedFile);
   };
 
   const simulateLoading = () => {
@@ -143,11 +165,6 @@ export default function Dropzone() {
 
         {file && (
           <div className="w-full px-4 py-2 gap-2 flex flex-col justify-start items-center border-t dark:border-neutral-700 overflow-auto">
-            <div className="w-full flex flex-row justify-end items-center">
-              <p className="bg-neutral-100 px-2 text-sm py-1 rounded-full text-neutral-500">
-                1 file, {formatBytes(file.size)}
-              </p>
-            </div>
             <div className="flex flex-row justify-between items-center border dark:border-neutral-700 rounded-lg px-2 py-1 w-full group">
               <div className="flex flex-row justify-start items-center gap-2">
                 <File className="h-5 w-5 text-neutral-500" />
@@ -193,15 +210,6 @@ export default function Dropzone() {
           </div>
         )}
       </div>
-      {file && (
-        <p
-          className="text-sm mt-4 rounded-full px-4 py-1 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:cursor-pointer transition-all border text-neutral-500 hover:text-black"
-          onClick={() => setFile(null)}
-        >
-          <RotateCcw className="inline-block h-4 w-4 mr-1" />
-          Reset
-        </p>
-      )}
     </>
   );
 }

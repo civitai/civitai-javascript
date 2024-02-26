@@ -1,4 +1,3 @@
-import { useSearchParams } from "next/navigation";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -15,12 +14,12 @@ export async function POST(req: Request) {
 
   try {
     const data = await req.json();
+    console.log("Webhook data:", data);
 
     if (data) {
       return NextResponse.json(
         {
           success: true,
-          message: "Webhook received successfully",
           data,
         },
         { status: 200 }

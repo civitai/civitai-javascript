@@ -1,3 +1,5 @@
+import { Scheduler } from "civitai";
+
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,7 +15,7 @@ export function usePlaygroundForm() {
         "instagram photo, closeup face photo of 23 y.o Chloe in black sweater, cleavage, pale skin, (smile:0.4), hard shadows",
       negativePrompt:
         "(worst quality:1.4), (low quality:1.4), simple background, bad anatomy",
-      scheduler: "EulerA",
+      scheduler: Scheduler.EULER_A,
       steps: 20,
       cfgScale: 7,
       width: 512,
