@@ -1,8 +1,15 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
+<img width="1567" alt="comfyui demo" src="https://github.com/civitai/civitai-javascript/assets/34775928/c0db95bf-765f-4580-a0fa-97b426b27861">
 
 ## Getting Started
 
-First, run the development server:
+First, set up the environment variables in `.env`:
+```
+CIVITAI_TOKEN=
+
+## (optional, but recommended) Generate a random secret for the webhook: https://generate-secret.vercel.app/32
+CIVITAI_WEBHOOK_SECRET=
+```
 
 ```bash
 npm run dev
