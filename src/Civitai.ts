@@ -1,85 +1,18 @@
-import Joi from "joi";
-
 import { JobsService } from "./services/JobsService";
 import { OpenAPI } from "./core/OpenAPI";
-import type { Scheduler } from "./models/Scheduler";
-import type { ImageJobNetworkParams } from "./models/ImageJobNetworkParams";
-import { ImageJobControlNet } from "./models/ImageJobControlNet";
-
-// Interfaces for configuration and input types
-interface CivitaiConfig {
-  auth: string;
-}
-
-type fromComfyInput = { params?: Record<string, any> | null };
-
-type FromTextInput = {
-  baseModel?: string;
-  model: string;
-  params: {
-    prompt: string;
-    negativePrompt?: string;
-    scheduler?: Scheduler;
-    steps?: number;
-    cfgScale?: number;
-    width: number;
-    height: number;
-    seed?: number;
-    clipSkip?: number;
-  };
-  additionalNetworks: {
-    [key: string]: ImageJobNetworkParams;
-  };
-  controlNets?: ImageJobControlNet[];
-  callbackUrl?: string;
-};
-
-// Joi schema for runtime validation
-const controlNetSchema = Joi.object({
-  preprocessor: Joi.string()
-    .valid("Canny", "DepthZoe", "SoftedgePidinet", "Rembg")
-    .optional(),
-  weight: Joi.number().optional(),
-  startStep: Joi.number().optional(),
-  endStep: Joi.number().optional(),
-  blobKey: Joi.string().allow(null).optional(),
-  imageUrl: Joi.string().allow(null).optional(),
-});
-
-const fromTextSchema = Joi.object({
-  baseModel: Joi.string().optional(),
-  model: Joi.string().required(),
-  params: Joi.object({
-    prompt: Joi.string().required(),
-    negativePrompt: Joi.string().optional(),
-    scheduler: Joi.string().optional(),
-    steps: Joi.number().optional(),
-    cfgScale: Joi.number().optional(),
-    width: Joi.number().required(),
-    height: Joi.number().required(),
-    seed: Joi.number().optional(),
-    clipSkip: Joi.number().optional(),
-  }).required(),
-  additionalNetworks: Joi.object()
-    .pattern(
-      Joi.string(),
-      Joi.object({
-        type: Joi.string().required(),
-        strength: Joi.number().optional(),
-        triggerWord: Joi.string().optional(),
-      })
-    )
-    .optional(),
-  controlNets: Joi.array().items(controlNetSchema).optional(),
-  callbackUrl: Joi.string().optional(),
-});
+import { fromTextSchema } from "./validation/ValidationSchemas";
+import {
+  CivitaiConfig,
+  FromComfyInput,
+  FromTextInput,
+} from "./models/InputTypes";
 
 // Main class for interacting with Civitai services
 class Civitai {
   // Define the structure of image and job operations
   image: {
     fromText: (input: FromTextInput, wait?: boolean) => Promise<any>;
-    fromComfy: (input: fromComfyInput, wait?: boolean) => Promise<any>;
+    fromComfy: (input: FromComfyInput, wait?: boolean) => Promise<any>;
   };
   job: {
     get: (jobId: string) => Promise<any>;

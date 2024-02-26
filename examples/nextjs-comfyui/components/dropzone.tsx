@@ -112,7 +112,7 @@ export default function Dropzone() {
 
   return (
     <>
-      <div className="w-[350px] md:min-w-[400px] mb-4">
+      <div className="w-[500px] md:min-w-[400px] mb-4">
         <div className="border-b">
           <div className="flex flex-row justify-start items-center px-4 py-2.5 gap-2">
             <div className="rounded-full border p-2 flex flex-row justify-center items-center dark:border-neutral-700">

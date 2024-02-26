@@ -38,8 +38,8 @@ describe("Create FromText Job", () => {
       },
       callbackUrl: "https://4a1e-104-222-28-153.ngrok-free.app/api/webhook",
     };
-    // Long polling as we did not pass in `wait` parameter
-    const output = await civitai.image.fromText(input);
+    // Long polling as we pass in `wait` parameter
+    const output = await civitai.image.fromText(input, true);
     console.log("Response:", JSON.stringify(output, null, 2));
     expect(output).toBeDefined();
   }, 600000);
