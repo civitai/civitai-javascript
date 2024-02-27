@@ -9,7 +9,8 @@ export default async function Nav() {
       <ThemeToggle />
 
       <Link
-        href="hthttps://github.com/civitai/civitai-javascript/tree/master/examples/nextjs-txt2img"
+        href="https://github.com/civitai/civitai-javascript/tree/master/examples/nextjs-txt2img"
+        target="_blank"
         className="group inline-flex items-center"
       >
         <Button variant={"ghost"} className="relative">
