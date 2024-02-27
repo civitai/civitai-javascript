@@ -1,41 +1,40 @@
-// Joi schema for runtime validation
-import Joi from "joi";
+// Zod schema for runtime validation
+import { z } from "zod";
 
-const controlNetSchema = Joi.object({
-  preprocessor: Joi.string()
-    .valid("Canny", "DepthZoe", "SoftedgePidinet", "Rembg")
+const controlNetSchema = z.object({
+  preprocessor: z
+    .enum(["Canny", "DepthZoe", "SoftedgePidinet", "Rembg"])
     .optional(),
-  weight: Joi.number().optional(),
-  startStep: Joi.number().optional(),
-  endStep: Joi.number().optional(),
-  blobKey: Joi.string().allow(null).optional(),
-  imageUrl: Joi.string().allow(null).optional(),
+  weight: z.number().optional(),
+  startStep: z.number().optional(),
+  endStep: z.number().optional(),
+  blobKey: z.string().nullable().optional(),
+  imageUrl: z.string().nullable().optional(),
 });
 
-export const fromTextSchema = Joi.object({
-  baseModel: Joi.string().optional(),
-  model: Joi.string().required(),
-  params: Joi.object({
-    prompt: Joi.string().required(),
-    negativePrompt: Joi.string().optional(),
-    scheduler: Joi.string().optional(),
-    steps: Joi.number().optional(),
-    cfgScale: Joi.number().optional(),
-    width: Joi.number().required(),
-    height: Joi.number().required(),
-    seed: Joi.number().optional(),
-    clipSkip: Joi.number().optional(),
-  }).required(),
-  additionalNetworks: Joi.object()
-    .pattern(
-      Joi.string(),
-      Joi.object({
-        type: Joi.string().required(),
-        strength: Joi.number().optional(),
-        triggerWord: Joi.string().optional(),
+export const fromTextSchema = z.object({
+  baseModel: z.string().optional(),
+  model: z.string(),
+  params: z.object({
+    prompt: z.string(),
+    negativePrompt: z.string().optional(),
+    scheduler: z.string().optional(),
+    steps: z.number().optional(),
+    cfgScale: z.number().optional(),
+    width: z.number(),
+    height: z.number(),
+    seed: z.number().optional(),
+    clipSkip: z.number().optional(),
+  }),
+  additionalNetworks: z
+    .record(
+      z.object({
+        type: z.string(),
+        strength: z.number().optional(),
+        triggerWord: z.string().optional(),
       })
     )
     .optional(),
-  controlNets: Joi.array().items(controlNetSchema).optional(),
-  callbackUrl: Joi.string().optional(),
+  controlNets: z.array(controlNetSchema).optional(),
+  callbackUrl: z.string().optional(),
 });

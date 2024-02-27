@@ -8,6 +8,8 @@ import { QueryJobsRequest } from "./models/QueryJobsRequest";
 import { ProblemDetails } from "./models/ProblemDetails";
 
 import { fromTextSchema } from "./validation/ValidationSchemas";
+import { ZodError } from "zod";
+
 import {
   CivitaiConfig,
   FromComfyInput,
@@ -49,9 +51,12 @@ class Civitai {
       // Convert text to image, optionally not waiting for job completion
       fromText: async (input, wait = false) => {
         // Runtime validation
-        const { error } = fromTextSchema.validate(input);
-        if (error) {
-          throw new Error(`Validation error: ${error.message}`);
+        try {
+          fromTextSchema.parse(input);
+        } catch (error) {
+          if (error instanceof ZodError) {
+            throw new Error(`Validation error: ${error.message}`);
+          }
         }
 
         // Prepare job input with default values

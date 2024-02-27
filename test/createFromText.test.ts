@@ -19,8 +19,7 @@ describe("Create FromText Job", () => {
       params: {
         prompt:
           "masterpiece, best quality, 1girl, IncrsAhri, multiple tails, fox tail, korean clothes, skirt, braid, arms behind back, seductive smile",
-        negativePrompt:
-          "(worst quality:1.4), (low quality:1.4), simple background, bad anatomy",
+        negativePrompt: "",
         scheduler: Scheduler.EULER_A,
         steps: 25,
         cfgScale: 7,
