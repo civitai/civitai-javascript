@@ -4,7 +4,7 @@ dotenv.config({ path: ".env.test" });
 
 describe("Cancel Job Functionality", () => {
   let civitai: Civitai;
-  let jobId: string = "2f93c5c4-d1d8-4def-9dd0-2e25e004c961";
+  let jobId: string = "3bd49f7d-f379-4fe5-b3d4-dc2f4d0ef0cd";
 
   beforeAll(() => {
     civitai = new Civitai({

@@ -15,7 +15,7 @@ describe("Create FromText Job", () => {
 
   test("successfully creates a FromText job", async () => {
     const input = {
-      model: "urn:air:sd1:checkpoint:civitai:107842@275408",
+      model: "urn:air:sd1:checkpoint:civitai:4201@130072",
       params: {
         prompt:
           "masterpiece, best quality, 1girl, IncrsAhri, multiple tails, fox tail, korean clothes, skirt, braid, arms behind back, seductive smile",
@@ -41,5 +41,5 @@ describe("Create FromText Job", () => {
     const output = await civitai.image.fromText(input, true);
     console.log("Response:", JSON.stringify(output, null, 2));
     expect(output).toBeDefined();
-  }, 60000);
+  }, 40000);
 });
