@@ -1,9 +1,10 @@
 import { JobsService } from "./services/JobsService";
+import { CoverageService } from "./services/CoverageService";
 import { OpenAPI } from "./core/OpenAPI";
 import { AIR } from "./models/AIR";
 import { ProviderAssetAvailability } from "./models/ProviderAssetAvailability";
 import { JobStatusCollection } from "./models/JobStatusCollection";
-import { CoverageService } from "./services/CoverageService";
+import { QueryJobsRequest } from "./models/QueryJobsRequest";
 import { ProblemDetails } from "./models/ProblemDetails";
 
 import { fromTextSchema } from "./validation/ValidationSchemas";
@@ -12,6 +13,7 @@ import {
   FromComfyInput,
   FromTextInput,
 } from "./models/InputTypes";
+import { QueryJobsResult } from "./models/QueryJobsResult";
 
 // Main class for interacting with Civitai services
 class Civitai {
@@ -26,9 +28,9 @@ class Civitai {
       wait?: boolean
     ) => Promise<JobStatusCollection | ProblemDetails | any>;
   };
-  job: {
-    get: (jobId: string) => Promise<JobStatusCollection | any>;
-    cancel: (jobId: string) => Promise<any>;
+  jobs: {
+    get: (token: string) => Promise<JobStatusCollection | any>;
+    cancel: (jobId: string) => Promise<any | ProblemDetails>;
   };
   models: {
     get: (
@@ -145,7 +147,7 @@ class Civitai {
     };
 
     // Job-related operations
-    this.job = {
+    this.jobs = {
       // Fetch job status by token
       get: async (token: string) => {
         const fullResponse = await JobsService.getV1ConsumerJobs(token);
@@ -190,7 +192,7 @@ class Civitai {
       }
 
       // Check job status
-      const response = await this.job.get(token);
+      const response = await this.jobs.get(token);
       const job = response.jobs && response.jobs[0];
       if (job && job.result && job.result.blobUrl) {
         return response;

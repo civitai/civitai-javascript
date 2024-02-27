@@ -32,8 +32,7 @@ const civitai = new Civitai({
 import { Scheduler } from "civitai";
 
 const input = {
-  baseModel: "SDXL",
-  model: "@civitai/128713",
+  model: "urn:air:sd1:checkpoint:civitai:4201@130072",
   params: {
     prompt:
       "instagram photo, closeup face photo of 23 y.o Chloe in black sweater, cleavage, pale skin, (smile:0.4), hard shadows",
@@ -67,7 +66,7 @@ const response = await civitai.image.fromText(input, false); // Add false flag
 Then fetch the result later:
 
 ```js
-const output = civitai.job.get(response.token);
+const output = civitai.jobs.get(response.token);
 ```
 
 ### Using Additional Networks
@@ -80,8 +79,7 @@ To use any of the networks availabe on Civitai, simply the `additionNetworks` fi
 import { Scheduler, AssetType } from "civitai";
 
 const input = {
-  baseModel: "SD_1_5",
-  model: "urn:air:sd1:checkpoint:civitai:107842@275408",
+  model: "urn:air:sd1:checkpoint:civitai:4384@128713",
   params: {
     prompt:
       "masterpiece, best quality, 1girl, IncrsAhri, multiple tails, fox tail, korean clothes, skirt, braid, arms behind back, seductive smile",
@@ -121,12 +119,12 @@ const civitai = new Civitai(options);
 | ------ | ------ | ------------------------------ |
 | `auth` | string | **Required**. API access token |
 
-### `civitai.job.get`
+### `civitai.jobs.get`
 
 Get the status of a job by looking up the job token.
 
 ```js
-const response = await civitai.job.get(token);
+const response = await civitai.jobs.get(token);
 ```
 
 ```json
@@ -204,12 +202,12 @@ const response = await civitai.image.fromText(options);
 | `endStep`      | number \| null                                                | Optional. The step at which the control net stops applying.                                                                                                                            |
 | `imageUrl`     | string \| null                                                | Optional. The URL of the image associated with the controlnet.                                                                                                                         |
 
-### `civitai.job.cancel`
+### `civitai.jobs.cancel`
 
 Cancel a job by its jobId.
 
 ```js
-const response = await civitai.job.cancel(jobId);
+const response = await civitai.jobs.cancel(jobId);
 ```
 
 This method cancels a job that is currently scheduled or running. It requires the `jobId` of the job you wish to cancel. On successful cancellation, it returns a response object indicating the cancellation status.
@@ -344,7 +342,6 @@ Here’s an example using the `civitai` JavaScript client:
 ```js
 await civitai.image.fromText({
   input: {
-    baseModel: "SD_1_5",
     model: "urn:air:sd1:checkpoint:civitai:4384@128713",
     params: {
       prompt: "a cat in a field of flowers",

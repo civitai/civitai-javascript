@@ -4,8 +4,8 @@
   "description": "JavaScript client for Civitai's generator",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "homepage": "https://github.com/civitai/civitai-javascript",
-  "demo": "https://civitai-javascript.vercel.app/",
+  "repository": "https://github.com/civitai/civitai-javascript",
+  "demo": "https://sdk.civitai.com/",
   "files": [
     "dist",
     "README.md",
