@@ -37,4 +37,6 @@ export const fromTextSchema = z.object({
     .optional(),
   controlNets: z.array(controlNetSchema).optional(),
   callbackUrl: z.string().optional(),
+  quantity: z.number().optional().default(1),
+  properties: z.record(z.any()).optional(),
 });

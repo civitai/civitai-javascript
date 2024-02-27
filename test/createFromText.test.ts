@@ -1,5 +1,6 @@
 import Civitai from "../dist/Civitai";
 import { AssetType } from "../dist/models/AssetType";
+import { FromTextInput } from "../dist/models/InputTypes";
 import { Scheduler } from "../dist/models/Scheduler";
 import dotenv from "dotenv";
 dotenv.config({ path: ".env.test" });
@@ -14,12 +15,13 @@ describe("Create FromText Job", () => {
   });
 
   test("successfully creates a FromText job", async () => {
-    const input = {
+    const input: FromTextInput = {
       model: "urn:air:sd1:checkpoint:civitai:4201@130072",
       params: {
         prompt:
           "masterpiece, best quality, 1girl, IncrsAhri, multiple tails, fox tail, korean clothes, skirt, braid, arms behind back, seductive smile",
-        negativePrompt: "",
+        negativePrompt:
+          "(worst quality:1.4), (low quality:1.4), simple background, bad anatomy",
         scheduler: Scheduler.EULER_A,
         steps: 25,
         cfgScale: 7,
@@ -27,6 +29,10 @@ describe("Create FromText Job", () => {
         height: 768,
         seed: -1,
         clipSkip: 2,
+      },
+      quantity: 1,
+      properties: {
+        userId: 69,
       },
       // additionalNetworks: {
       //   "urn:air:sd1:lora:civitai:162141@182559": {

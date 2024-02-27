@@ -32,4 +32,6 @@ export type FromTextInput = {
   };
   controlNets?: ImageJobControlNet[];
   callbackUrl?: string;
+  quantity?: number;
+  properties?: Record<string, any> | null;
 };
