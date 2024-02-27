@@ -1,4 +1,5 @@
 import { civitai } from "@/lib/civitai";
+import { NextApiResponse } from "next";
 
 interface JobResult {
   blobUrl: string;
@@ -10,7 +11,7 @@ interface Job {
 }
 
 export async function GET(
-  req: Request,
+  res: NextApiResponse,
   { params }: { params: { token: string } }
 ) {
   const token = params.token;
