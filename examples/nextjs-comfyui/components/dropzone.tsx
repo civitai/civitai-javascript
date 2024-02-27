@@ -192,7 +192,7 @@ export default function Dropzone() {
                   </div>
                 )}
                 <button
-                  className="text-neutral-400 bg-neutral-100 p-1 rounded-lg hover:text-black transition-all hover:cursor-pointer"
+                  className="text-neutral-400 p-1 rounded-lg hover:text-black transition-all hover:cursor-pointer"
                   onClick={handleDelete}
                 >
                   <Trash2 className="h-4 w-4" />

@@ -6,7 +6,7 @@ import { WEBHOOK_URL } from "./constants";
 import fs from "fs/promises"; // Use the Promise-based version of fs
 
 const civitai = new Civitai({
-  auth: process.env.CIVITAI_TOKEN as string,
+  auth: process.env.CIVITAI_API_TOKEN as string,
 });
 
 export async function generate(jsonContent: string) {

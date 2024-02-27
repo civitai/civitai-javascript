@@ -8,7 +8,7 @@ describe("Cancel Job Functionality", () => {
 
   beforeAll(() => {
     civitai = new Civitai({
-      auth: process.env.CIVITAI_TOKEN || "",
+      auth: process.env.CIVITAI_API_TOKEN || "",
     });
   });
 

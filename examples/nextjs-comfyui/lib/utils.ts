@@ -10,7 +10,24 @@ export function cn(...inputs: ClassValue[]) {
 export type FormValues = z.infer<typeof formSchema>;
 
 export const formSchema = z.object({
-  jsonContent: z.string().optional(),
+  jsonContent: z
+    .string()
+    .min(1, {
+      message: "JSON content is empty.",
+    })
+    .refine(
+      (data) => {
+        try {
+          JSON.parse(data);
+          return true;
+        } catch {
+          return false;
+        }
+      },
+      {
+        message: "JSON content is invalid.",
+      }
+    ),
 });
 
 // 7-character random string

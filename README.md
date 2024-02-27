@@ -152,6 +152,23 @@ Run a model with inputs you provide.
 const response = await civitai.image.fromText(options);
 ```
 
+```json
+{
+  "token": "W3siVGVtcGxhdGVUeXBlIjoiQ2l2aXRhaS5PcmNoZXN0cmF0aW9uLkFwaS5Db250cm9sbGVycy52MS5Db25zdW1lci5Kb2JzLlRlbXBsYXRlcy5UZXh0VG9JbWFnZUpvYlRlbXBsYXRlIiwiSm9icyI6eyJiYzk1ZGZhMi1jNmEwLTQ1OWMtYjljZS02YjJiOWJjYjQ1MjYiOiIwOTU0RTY5OEUwM0Y5RTdCNEE3M0RGRjlDNkIwQUFDQkU4NTBBRjA3MkMzQzYyMjA0RjkyNzZFMkQyQzc0QjZFIn19XQ==",
+  "jobs": [
+    {
+      "jobId": "bc95dfa2-c6a0-459c-b9ce-6b2b9bcb4526",
+      "cost": 1.2000000000000002,
+      "result": {
+        "blobKey": "0954E698E03F9E7B4A73DFF9C6B0AACBE850AF072C3C62204F9276E2D2C74B6E",
+        "available": false
+      },
+      "scheduled": true
+    }
+  ]
+}
+```
+
 | name                    | type                                                                  | description                                                                                                                                                                                                                                                                                                                               |
 | ----------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `baseModel`             | enum `"SD_1_5"`, `"SDXL"`                                             | **Required**. Base Stable Diffusion Model.                                                                                                                                                                                                                                                                                                |
@@ -167,7 +184,7 @@ const response = await civitai.image.fromText(options);
 | `params.clipSkip`       | number \| null                                                        | Optional. The number of CLIP skips for the image generation.                                                                                                                                                                                                                                                                              |
 | `callbackUrl`           | string \| null                                                        | Optional. URL that will be invoked upon completion of this job                                                                                                                                                                                                                                                                            |
 | `additionalNetworks`    | [ImageJobNetworkParams](src/models/ImageJobNetworkParams.ts) \| null  | Optional. An associative list of additional networks, keyed by the AIR of the network. Each network is of type [AssetType](src/models/AssetType.ts).                                                                                                                                                                                      |
-| `controlNets`           | Array[<ImageJobControlNet>](src/models/ImageJobControlNet.ts) \| null | Optional. An associative list of additional networks.                                                                                                                                                                                                                                                                                     |
+| `controlNets`           | Array<[ImageJobControlNet](src/models/ImageJobControlNet.ts)> \| null | Optional. An associative list of additional networks.                                                                                                                                                                                                                                                                                     |
 
 #### Additional Networks
 
@@ -185,23 +202,7 @@ const response = await civitai.image.fromText(options);
 | `weight`       | number \| null                                                | Optional. The weight of the control net.                                                                                                                                               |
 | `startStep`    | number \| null                                                | Optional. The step at which the control net starts to apply.                                                                                                                           |
 | `endStep`      | number \| null                                                | Optional. The step at which the control net stops applying.                                                                                                                            |
-
-```json
-{
-  "token": "W3siVGVtcGxhdGVUeXBlIjoiQ2l2aXRhaS5PcmNoZXN0cmF0aW9uLkFwaS5Db250cm9sbGVycy52MS5Db25zdW1lci5Kb2JzLlRlbXBsYXRlcy5UZXh0VG9JbWFnZUpvYlRlbXBsYXRlIiwiSm9icyI6eyJiYzk1ZGZhMi1jNmEwLTQ1OWMtYjljZS02YjJiOWJjYjQ1MjYiOiIwOTU0RTY5OEUwM0Y5RTdCNEE3M0RGRjlDNkIwQUFDQkU4NTBBRjA3MkMzQzYyMjA0RjkyNzZFMkQyQzc0QjZFIn19XQ==",
-  "jobs": [
-    {
-      "jobId": "bc95dfa2-c6a0-459c-b9ce-6b2b9bcb4526",
-      "cost": 1.2000000000000002,
-      "result": {
-        "blobKey": "0954E698E03F9E7B4A73DFF9C6B0AACBE850AF072C3C62204F9276E2D2C74B6E",
-        "available": false
-      },
-      "scheduled": true
-    }
-  ]
-}
-```
+| `imageUrl`     | string \| null                                                | Optional. The URL of the image associated with the controlnet.                                                                                                                         |
 
 ### `civitai.job.cancel`
 
@@ -391,7 +392,7 @@ npm run build
 
 This will compile the TypeScript files and generate the necessary JavaScript files in the `dist` directory.
 
-3. Create a `.env.test` file in the root directory and add your Civitai API token, i.e., `CIVITAI_TOKEN`.
+3. Create a `.env.test` file in the root directory and add your Civitai API token, i.e., `CIVITAI_API_TOKEN`.
 
 ### Running Tests
 

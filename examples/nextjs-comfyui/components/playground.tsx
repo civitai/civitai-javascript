@@ -25,6 +25,7 @@ export default function Playground() {
 
   async function onSubmit(values: FormValues) {
     setSubmitting(true);
+    console.log("values", values);
     try {
       const jsonContent = values.jsonContent;
       generate(jsonContent).then((id) => {

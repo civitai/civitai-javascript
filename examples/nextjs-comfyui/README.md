@@ -1,16 +1,18 @@
-
 <img width="1567" alt="comfyui demo" src="https://github.com/civitai/civitai-javascript/assets/34775928/c0db95bf-765f-4580-a0fa-97b426b27861">
 
 ## Getting Started
 
 First, set up the environment variables in `.env`:
+
 ```
-CIVITAI_TOKEN=
+CIVITAI_API_TOKEN=
 
 ## (optional, but recommended) Generate a random secret for the webhook: https://generate-secret.vercel.app/32
 CIVITAI_WEBHOOK_SECRET=
 ```
+
 Run the development server:
+
 ```bash
 npm run dev
 # or

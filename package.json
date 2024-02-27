@@ -1,6 +1,6 @@
 {
   "name": "civitai",
-  "version": "0.1.0",
+  "version": "0.0.9",
   "description": "JavaScript client for Civitai's generator",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -20,7 +20,8 @@
   "scripts": {
     "generate": "openapi --input ./swagger.json --output ./generated",
     "build": "tsc",
-    "test": "jest"
+    "test": "jest",
+    "prepublishOnly": "npm test && npm run build"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",

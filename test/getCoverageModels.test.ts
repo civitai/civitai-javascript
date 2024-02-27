@@ -7,7 +7,7 @@ describe("Get Coverage Models", () => {
 
   beforeAll(() => {
     civitai = new Civitai({
-      auth: process.env.CIVITAI_TOKEN || "",
+      auth: process.env.CIVITAI_API_TOKEN || "",
     });
   });
 
