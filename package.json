@@ -1,12 +1,13 @@
 {
   "name": "civitai",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "JavaScript client for Civitai's generator",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "repository": "https://github.com/civitai/civitai-javascript",
+  "homepage": "https://github.com/civitai/civitai-javascript",
   "demo": "https://civitai-javascript.vercel.app/",
   "files": [
+    "dist",
     "README.md",
     "dist/index.d.ts",
     "dist/index.js",
