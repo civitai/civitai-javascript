@@ -362,6 +362,7 @@ For a real-world example of webhook handling in Next.js, check out [the Nextjs C
 ## Examples
 
 [Build a web app with Next.js App Router](https://github.com/civitai/civitai-javascript/tree/master/examples/nextjs-txt2img)
+
 [Build a ComfyUI app](https://github.com/civitai/civitai-javascript/tree/master/examples/nextjs-comfyui)
 
 ## Contribution

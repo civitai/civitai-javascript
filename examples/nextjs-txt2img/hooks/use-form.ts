@@ -9,7 +9,6 @@ export function usePlaygroundForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      baseModel: "SD_1_5",
       model: "urn:air:sd1:checkpoint:civitai:4201@130072",
       prompt:
         "instagram photo, closeup face photo of 23 y.o Chloe in black sweater, cleavage, pale skin, (smile:0.4), hard shadows",

@@ -15,7 +15,6 @@ describe("Create FromText Job", () => {
 
   test("successfully creates a FromText job", async () => {
     const input = {
-      baseModel: "SD_1_5",
       model: "urn:air:sd1:checkpoint:civitai:107842@275408",
       params: {
         prompt:
@@ -30,17 +29,17 @@ describe("Create FromText Job", () => {
         seed: -1,
         clipSkip: 2,
       },
-      additionalNetworks: {
-        "urn:air:sd1:lora:civitai:162141@182559": {
-          type: AssetType.LORA,
-          strength: 1.0,
-        },
-      },
-      callbackUrl: "https://4a1e-104-222-28-153.ngrok-free.app/api/webhook",
+      // additionalNetworks: {
+      //   "urn:air:sd1:lora:civitai:162141@182559": {
+      //     type: AssetType.LORA,
+      //     strength: 1.0,
+      //   },
+      // },
+      // callbackUrl: "https://4a1e-104-222-28-153.ngrok-free.app/api/webhook",
     };
     // Long polling as we pass in `wait` parameter
     const output = await civitai.image.fromText(input, true);
     console.log("Response:", JSON.stringify(output, null, 2));
     expect(output).toBeDefined();
-  }, 600000);
+  }, 60000);
 });

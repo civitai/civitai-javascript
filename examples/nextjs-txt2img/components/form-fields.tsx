@@ -23,49 +23,22 @@ export const FormFields = () => {
 
   return (
     <div className="flex flex-col space-y-3">
-      <div className="flex flex-col md:grid grid-cols-4 gap-4">
-        <FormField
-          control={form.control}
-          name="baseModel"
-          render={({ field }) => (
-            <FormItem className="col-span-1">
-              <FormLabel htmlFor="base model">Base model</FormLabel>
-              <FormControl>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="SD_1_5">SD 1.5</SelectItem>
-                    <SelectItem value="SDXL">SDXL</SelectItem>
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="model"
-          render={({ field }) => (
-            <FormItem className="col-span-3">
-              <FormLabel htmlFor="civitai model">Civitai model</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="urn:air:sd1:checkpoint:civitai:4201@130072"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      </div>
+      <FormField
+        control={form.control}
+        name="model"
+        render={({ field }) => (
+          <FormItem className="col-span-3">
+            <FormLabel htmlFor="civitai model">Civitai model</FormLabel>
+            <FormControl>
+              <Input
+                placeholder="urn:air:sd1:checkpoint:civitai:4201@130072"
+                {...field}
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
 
       <FormField
         control={form.control}

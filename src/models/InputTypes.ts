@@ -27,7 +27,7 @@ export type FromTextInput = {
     seed?: number;
     clipSkip?: number;
   };
-  additionalNetworks: {
+  additionalNetworks?: {
     [key: string]: ImageJobNetworkParams;
   };
   controlNets?: ImageJobControlNet[];

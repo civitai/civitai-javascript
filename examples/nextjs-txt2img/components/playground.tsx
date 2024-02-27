@@ -26,7 +26,6 @@ export default function Playground() {
     setSubmitting(true);
     try {
       const input = {
-        baseModel: values.baseModel,
         model: values.model,
         params: {
           prompt: values.prompt,

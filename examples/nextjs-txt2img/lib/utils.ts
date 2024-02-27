@@ -7,9 +7,6 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const formSchema = z.object({
-  baseModel: z.string().min(1, {
-    message: "Base model is empty.",
-  }),
   model: z.string().min(1, {
     message: "Model is empty.",
   }),
