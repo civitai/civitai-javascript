@@ -3,16 +3,19 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { Form } from "@/components/ui/form";
+import { ReloadIcon } from "@radix-ui/react-icons";
+
+import { Form } from "./ui/form";
 import { toast } from "sonner";
 import { Button } from "./ui/button";
-import { ReloadIcon } from "@radix-ui/react-icons";
 import { SuccessIcon } from "./ui/success-icon";
+
+import { FormFields } from "./form-fields";
 
 import { z } from "zod";
 import { usePlaygroundForm } from "@/hooks/use-form";
-import { cn, formSchema, pollJob } from "@/lib/utils";
-import { FormFields } from "./form-fields";
+import { cn, pollJob } from "@/lib/utils";
+import { formSchema } from "@/lib/form-schemas";
 
 export default function Playground() {
   const form = usePlaygroundForm();
