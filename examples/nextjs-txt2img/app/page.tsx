@@ -5,7 +5,7 @@ import Playground from "@/components/playground";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col mx-auto items-center py-24 md:p-24">
+    <main className="flex min-h-screen flex-col mx-auto items-center py-24 md:p-24 max-w-7xl">
       <Nav />
       <div className="flex flex-col items-center gap-10">
         <h1 className="text-xl md:text-4xl font-semibold pb-4 text-center bg-clip-text text-transparent bg-gradient-to-b from-gray-600 to-gray-900 dark:from-neutral-100 dark:to-neutral-300">

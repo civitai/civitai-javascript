@@ -76,10 +76,10 @@ export default function Playground() {
   }
 
   return (
-    <div className="flex flex-col mx-auto px-8 md:px-0">
+    <div className="flex flex-col w-full px-8 md:px-0">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-2 gap-8 mx-auto justify-center">
             <div className="flex flex-col space-y-4">
               <FormFields />
 

@@ -3,7 +3,7 @@ import { Scheduler } from "civitai";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { formSchema } from "@/lib/utils";
+import { additionalNetworksSchema, formSchema } from "@/lib/form-schemas";
 
 export function usePlaygroundForm() {
   const form = useForm<z.infer<typeof formSchema>>({
@@ -20,7 +20,16 @@ export function usePlaygroundForm() {
       width: 512,
       height: 512,
       clipSkip: 2,
+      additionalNetworks: {},
     },
+  });
+
+  return form;
+}
+
+export function useAdditionalNetworksForm() {
+  const form = useForm<z.infer<typeof additionalNetworksSchema>>({
+    resolver: zodResolver(additionalNetworksSchema),
   });
 
   return form;
