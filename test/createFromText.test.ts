@@ -31,9 +31,9 @@ describe("Create FromText Job", () => {
         clipSkip: 2,
       },
       quantity: 1,
-      properties: {
-        userId: 69,
-      },
+      // properties: {
+      //   userId: 69,
+      // },
       // additionalNetworks: {
       //   "urn:air:sd1:lora:civitai:162141@182559": {
       //     type: AssetType.LORA,

@@ -1,8 +1,8 @@
 // import * as React from "react";
-// import { useFormContext } from "react-hook-form"; // Import useFormContext to access the form context
+// import { useFormContext } from "react-hook-form";
 
 // import { Button } from "./ui/button";
-// import { FormLabel } from "./ui/form";
+// import { Form, FormLabel } from "./ui/form";
 // import {
 //   Select,
 //   SelectContent,
@@ -18,6 +18,8 @@
 // } from "@/components/ui/accordion";
 // import { Input } from "./ui/input";
 // import { ScrollArea } from "./ui/scroll-area";
+// import { useAdditionalNetworksForm } from "@/hooks/use-form";
+// import { AssetType } from "civitai";
 
 // const networks = [
 //   "Lora",
@@ -30,20 +32,21 @@
 // ];
 
 // export function AdditionalNetworksCollapsible() {
+//   const networkForm = useAdditionalNetworksForm();
 //   const { register, watch, setValue } = useFormContext(); // Use useFormContext to access form methods
 //   const selectedNetwork = watch("additionalNetworks.type"); // Watch the selected network type
 
 //   // Handle network selection change
 //   const handleNetworkChange = (value: string) => {
-//     setValue("additionalNetworks.type", value);
+//     networkForm.setValue("type", value as AssetType);
 //     // Reset optional fields when changing network type
-//     setValue("additionalNetworks.model", null);
-//     setValue("additionalNetworks.strength", null);
-//     setValue("additionalNetworks.triggerWord", null);
+//     networkForm.setValue("model", null);
+//     networkForm.setValue("strength", null);
+//     networkForm.setValue("triggerWord", null);
 //   };
 
 //   return (
-//     <form onSubmit={(data) => console.log(data)}>
+//     <Form {...networkForm}>
 //       <Accordion type="single" collapsible>
 //         <AccordionItem value="item-1" className="border-0">
 //           <AccordionTrigger className="flex items-center justify-between space-x-4">
@@ -93,6 +96,6 @@
 //           </AccordionContent>
 //         </AccordionItem>
 //       </Accordion>
-//     </form>
+//     </Form>
 //   );
 // }
