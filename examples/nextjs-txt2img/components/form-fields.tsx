@@ -1,3 +1,4 @@
+import { useFormContext } from "react-hook-form";
 import {
   FormControl,
   FormField,
@@ -8,10 +9,8 @@ import {
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 
-import { usePlaygroundForm } from "@/hooks/use-form";
-
 export const FormFields = () => {
-  const form = usePlaygroundForm();
+  const form = useFormContext();
 
   return (
     <div className="flex flex-col space-y-3">

@@ -41,6 +41,7 @@ export default function Playground() {
           clipSkip: values.clipSkip,
         },
       };
+      console.log("input", input);
       const response = await fetch("/api/generate", {
         method: "POST",
         headers: {
