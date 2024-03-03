@@ -99,22 +99,21 @@ export default function Playground() {
                   {showPreview ? (
                     <motion.div
                       key="preview"
-                      initial={{ opacity: 0, x: -30 }}
+                      initial={{ opacity: 0, x: -50 }}
                       animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: 30 }}
-                      className="bg-accent rounded-md p-4 text-sm border"
+                      exit={{ opacity: 0, x: 50 }}
                     >
                       <FormPreview />
                     </motion.div>
                   ) : (
-                    <motion.code
+                    <motion.div
                       key="fields"
-                      initial={{ opacity: 0, x: 30 }}
+                      initial={{ opacity: 0, x: 50 }}
                       animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -30 }}
+                      exit={{ opacity: 0, x: -50 }}
                     >
                       <FormFields />
-                    </motion.code>
+                    </motion.div>
                   )}
                 </MotionConfig>
               </AnimatePresence>
