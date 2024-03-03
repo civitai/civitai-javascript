@@ -3,7 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { ReloadIcon } from "@radix-ui/react-icons";
+import { AnimatePresence, MotionConfig, motion } from "framer-motion";
+import { CodeIcon, ReloadIcon } from "@radix-ui/react-icons";
 
 import { Form } from "./ui/form";
 import { toast } from "sonner";
@@ -11,6 +12,7 @@ import { Button } from "./ui/button";
 import { SuccessIcon } from "./ui/success-icon";
 
 import { FormFields } from "./form-fields";
+import { FormPreview } from "./form-preview";
 
 import { z } from "zod";
 import { usePlaygroundForm } from "@/hooks/use-form";
@@ -24,6 +26,7 @@ export default function Playground() {
   // Form states
   const [isSuccess, setIsSuccess] = useState(false);
   const [isSubmitting, setSubmitting] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setSubmitting(true);
@@ -84,8 +87,37 @@ export default function Playground() {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="grid md:grid-cols-2 gap-8 mx-auto justify-center">
-            <div className="flex flex-col space-y-4">
-              <FormFields />
+            <div className="flex flex-col space-y-4 justify-between">
+              <AnimatePresence mode="wait">
+                <MotionConfig
+                  transition={{
+                    x: { type: "spring", stiffness: 300, damping: 30 },
+                    y: { type: "spring", stiffness: 300, damping: 30 },
+                    duration: 0.2,
+                  }}
+                >
+                  {showPreview ? (
+                    <motion.div
+                      key="preview"
+                      initial={{ opacity: 0, x: -30 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: 30 }}
+                      className="bg-accent rounded-md p-4 text-sm border"
+                    >
+                      <FormPreview />
+                    </motion.div>
+                  ) : (
+                    <motion.code
+                      key="fields"
+                      initial={{ opacity: 0, x: 30 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -30 }}
+                    >
+                      <FormFields />
+                    </motion.code>
+                  )}
+                </MotionConfig>
+              </AnimatePresence>
 
               <div className="flex flex-row items-center space-x-2">
                 <Button
@@ -115,6 +147,15 @@ export default function Playground() {
                     </div>
                   )}
                 </Button>
+
+                <Button
+                  size="icon"
+                  variant="secondary"
+                  type="button"
+                  onClick={() => setShowPreview(!showPreview)}
+                >
+                  <CodeIcon />
+                </Button>
               </div>
             </div>
             <div className="relative h-[320px] w-[320px] md:h-[500px] md:w-[500px] rounded-md border bg-muted">
@@ -137,7 +178,7 @@ export default function Playground() {
                       src={imageUrl}
                       width={512}
                       height={512}
-                      className="object-cover transition-all md:hover:scale-105"
+                      className="object-cover transition-all md:hover:scale-105 duration-200"
                     />
                   </Link>
                 )
