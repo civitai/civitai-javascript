@@ -31,26 +31,12 @@ export default function Playground() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setSubmitting(true);
     try {
-      const input = {
-        model: values.model,
-        params: {
-          prompt: values.prompt,
-          negativePrompt: values.negativePrompt,
-          scheduler: values.scheduler,
-          steps: values.steps,
-          cfgScale: values.cfgScale,
-          width: values.width,
-          height: values.height,
-          clipSkip: values.clipSkip,
-        },
-      };
-      console.log("input", input);
       const response = await fetch("/api/generate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(input),
+        body: JSON.stringify(values),
       });
       const data = await response.json();
       const token = data.token;
@@ -74,6 +60,7 @@ export default function Playground() {
           });
       } else {
         toast.error("Failed to generate image");
+        setSubmitting(false);
       }
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -108,9 +95,9 @@ export default function Playground() {
                   ) : (
                     <motion.div
                       key="fields"
-                      initial={{ opacity: 0, x: 50 }}
+                      initial={{ opacity: 0, x: -50 }}
                       animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -50 }}
+                      exit={{ opacity: 0, x: 50 }}
                     >
                       <FormFields />
                     </motion.div>
@@ -127,6 +114,17 @@ export default function Playground() {
                       "text-white duration-150 bg-green-500 hover:bg-green-600 hover:text-slate-100 focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 active:scale-100 active:bg-green-800 active:text-green-100"
                   )}
                   type="submit"
+                  onClick={async () => {
+                    const isValid = await form.trigger();
+                    const {
+                      formState: { errors },
+                    } = form;
+                    if (isValid) {
+                      onSubmit(form.getValues());
+                    } else {
+                      console.log("errors", errors);
+                    }
+                  }}
                 >
                   {isSubmitting ? (
                     <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />

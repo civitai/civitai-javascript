@@ -1,11 +1,11 @@
 import { AssetType } from "civitai";
 import { z } from "zod";
 
-export const additionalNetworksSchema = z.object({
-  model: z.string().optional(),
-  type: z.nativeEnum(AssetType).optional(),
-  strength: z.number().optional().or(z.null()),
-  triggerWord: z.string().optional().or(z.null()),
+const additionalNetworksSchema = z.object({
+  model: z.string().optional().nullable(),
+  type: z.nativeEnum(AssetType).optional().nullable(),
+  strength: z.number().optional().nullable(),
+  triggerWord: z.string().optional().nullable(),
 });
 
 export const formSchema = z.object({
@@ -34,5 +34,5 @@ export const formSchema = z.object({
   clipSkip: z.number().int().min(1, {
     message: "ClipSkip is empty.",
   }),
-  additionalNetworks: z.record(additionalNetworksSchema).optional(),
+  additionalNetworks: z.array(additionalNetworksSchema).optional().nullable(),
 });

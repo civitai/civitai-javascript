@@ -8,6 +8,7 @@ import {
 } from "./ui/form";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
+import { AdditionalNetworksCollapsible } from "./additional-networks-collapsible";
 
 export const FormFields = () => {
   const form = useFormContext();
@@ -73,7 +74,7 @@ export const FormFields = () => {
         )}
       />
 
-      {/* <AdditionalNetworksCollapsible /> */}
+      <AdditionalNetworksCollapsible />
     </div>
   );
 };

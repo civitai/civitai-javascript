@@ -20,7 +20,7 @@ export default async function Nav() {
               background="transparent"
               minSize={0.6}
               maxSize={1.4}
-              particleDensity={150}
+              particleDensity={40}
               className="w-full h-full"
               particleColor={"#98ABEE"}
             />
