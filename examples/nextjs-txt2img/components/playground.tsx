@@ -18,11 +18,15 @@ import { z } from "zod";
 import { usePlaygroundForm } from "@/hooks/use-form";
 import { cn, pollJob } from "@/lib/utils";
 import { formSchema } from "@/lib/form-schemas";
+import ExamplesSection from "./examples-section";
+import { Column } from "./ui/column";
 
 export default function Playground() {
   const form = usePlaygroundForm();
 
   const [imageUrl, setImageUrl] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null);
+
   // Form states
   const [isSuccess, setIsSuccess] = useState(false);
   const [isSubmitting, setSubmitting] = useState(false);
@@ -70,7 +74,7 @@ export default function Playground() {
   }
 
   return (
-    <div className="flex flex-col w-full px-8 md:px-0">
+    <div className="flex flex-col w-full px-8 md:px-0 gap-24">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="grid md:grid-cols-2 gap-8 mx-auto justify-center">
@@ -184,6 +188,8 @@ export default function Playground() {
           </div>
         </form>
       </Form>
+
+      <ExamplesSection setSelectedImage={setSelectedImage} />
     </div>
   );
 }

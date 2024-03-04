@@ -1,7 +1,7 @@
 import { AssetType } from "civitai";
 import { z } from "zod";
 
-const additionalNetworksSchema = z.object({
+export const additionalNetworksSchema = z.object({
   model: z.string().optional().nullable(),
   type: z.nativeEnum(AssetType).optional().nullable(),
   strength: z.number().optional().nullable(),

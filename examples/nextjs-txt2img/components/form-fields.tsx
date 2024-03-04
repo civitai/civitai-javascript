@@ -42,7 +42,7 @@ export const FormFields = () => {
               <div className="textarea-container relative">
                 <Textarea
                   placeholder={"A cat"}
-                  className="flex-1 min-h-[120px]"
+                  className="flex-1 min-h-[100px]"
                   {...field}
                 />
               </div>
@@ -73,6 +73,45 @@ export const FormFields = () => {
           </FormItem>
         )}
       />
+
+      <div className="flex justify-between gap-2">
+        <FormField
+          control={form.control}
+          name="steps"
+          render={({ field }) => (
+            <FormItem className="w-full">
+              <FormLabel htmlFor="steps">Steps</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="25"
+                  type="number"
+                  {...field}
+                  onChange={(e) => field.onChange(Number(e.target.value))}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="cfgScale"
+          render={({ field }) => (
+            <FormItem className="w-full">
+              <FormLabel htmlFor="cfgScale">CFG scale</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="7"
+                  type="number"
+                  {...field}
+                  onChange={(e) => field.onChange(Number(e.target.value))}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
 
       <AdditionalNetworksCollapsible />
     </div>

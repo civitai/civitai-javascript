@@ -37,7 +37,7 @@ describe("Create FromText Job", () => {
       quantity: 1,
     };
     // Long polling as we pass in `wait` parameter
-    const output = await civitai.image.fromText(input, true);
+    const output = await civitai.image.fromText(input, false);
     console.log("Response:", JSON.stringify(output, null, 2));
     expect(output).toBeDefined();
   }, 60000);

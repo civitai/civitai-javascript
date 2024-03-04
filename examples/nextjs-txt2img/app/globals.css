@@ -118,11 +118,45 @@
   background-clip: content-box;
 }
 
+.examples-container {
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    #ffffff00 0%,
+    black 10%,
+    black,
+    black 90%,
+    #ffffff00 100%
+  );
+  mask-image: linear-gradient(
+    90deg,
+    #ffffff00 0%,
+    black 10%,
+    black,
+    black 90%,
+    #ffffff00 100%
+  );
+}
+.examples-row {
+  animation: marquee 40s linear infinite;
+}
+.examples-row2 {
+  animation: marquee 30s linear infinite;
+}
+
 @keyframes rotate {
   from {
     transform: rotate(360deg);
   }
   to {
     transform: rotate(0deg);
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-1048px);
   }
 }
