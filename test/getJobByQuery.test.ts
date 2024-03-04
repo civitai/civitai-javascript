@@ -5,7 +5,7 @@ dotenv.config({ path: ".env.test" });
 
 describe("Get Jobs by Query Functionality", () => {
   let civitai: Civitai;
-  let query: QueryJobsRequest = {
+  const query: QueryJobsRequest = {
     properties: {
       userId: 4,
     },

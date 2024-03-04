@@ -15,8 +15,8 @@ describe("Get Job Status by Token Functionality", () => {
   });
 
   test("successfully fetches job status", async () => {
-    const response = await civitai.jobs.getByToken(token);
-    // const response = await civitai.jobs.getById(jobId);
+    // const response = await civitai.jobs.getByToken(token);
+    const response = await civitai.jobs.getById(jobId);
     console.log("Response:", JSON.stringify(response, null, 2));
     expect(response).toBeDefined();
   });

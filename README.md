@@ -119,29 +119,6 @@ const civitai = new Civitai(options);
 | ------ | ------ | ------------------------------ |
 | `auth` | string | **Required**. API access token |
 
-### `civitai.jobs.get`
-
-Get the status of a job by looking up the job token.
-
-```js
-const response = await civitai.jobs.get(token);
-```
-
-```json
-"jobs":
-[
-  {
-    "jobId": "3f6fe6cd-6ed5-49f2-9e6b-2471a21c88ff",
-    "cost": 1.2000000000000002,
-    "result": {
-      "blobKey": "606564B2E67282B49E5D0D25D989BB1213D1C766D4BD25333EC1EEDA2572AC51",
-      "available": false
-    },
-    "scheduled": true
-  }
-]
-```
-
 ### `civitai.image.fromText`
 
 Run a model with inputs you provide.
@@ -152,13 +129,13 @@ const response = await civitai.image.fromText(options);
 
 ```json
 {
-  "token": "W3siVGVtcGxhdGVUeXBlIjoiQ2l2aXRhaS5PcmNoZXN0cmF0aW9uLkFwaS5Db250cm9sbGVycy52MS5Db25zdW1lci5Kb2JzLlRlbXBsYXRlcy5UZXh0VG9JbWFnZUpvYlRlbXBsYXRlIiwiSm9icyI6eyJiYzk1ZGZhMi1jNmEwLTQ1OWMtYjljZS02YjJiOWJjYjQ1MjYiOiIwOTU0RTY5OEUwM0Y5RTdCNEE3M0RGRjlDNkIwQUFDQkU4NTBBRjA3MkMzQzYyMjA0RjkyNzZFMkQyQzc0QjZFIn19XQ==",
+  "token": "W3siSm9icyI6WyJjYzJkOGViNy1mOGE0LTRkNzYtOTE3Yi01OTliODRiZmRmNmYiXX1d",
   "jobs": [
     {
-      "jobId": "bc95dfa2-c6a0-459c-b9ce-6b2b9bcb4526",
+      "jobId": "cc2d8eb7-f8a4-4d76-917b-599b84bfdf6f",
       "cost": 1.2000000000000002,
       "result": {
-        "blobKey": "0954E698E03F9E7B4A73DFF9C6B0AACBE850AF072C3C62204F9276E2D2C74B6E",
+        "blobKey": "0B60A87CDFB8E7307D0F19F623EBD8240307BD9C2345CD03B7E52A489A52CC47",
         "available": false
       },
       "scheduled": true
@@ -201,6 +178,104 @@ const response = await civitai.image.fromText(options);
 | `startStep`    | number \| null                                                | Optional. The step at which the control net starts to apply.                                                                                                                           |
 | `endStep`      | number \| null                                                | Optional. The step at which the control net stops applying.                                                                                                                            |
 | `imageUrl`     | string \| null                                                | Optional. The URL of the image associated with the controlnet.                                                                                                                         |
+
+### `civitai.jobs.getById`
+
+Fetches the status of a job by its unique jobId.
+
+```js
+const response = await civitai.jobs.getById(jobId);
+```
+
+```json
+Response: {
+  "jobId": "3f071548-46c6-40d5-8e5a-210aa6b8bccc",
+  "cost": 1.2000000000000002,
+  "result": {
+    "blobKey": "27E0CD13EC240389EFB9A9C25EB29DC3B4AB74A973F132D6A6DB076C8B210570",
+    "available": true,
+    "blobUrl": "https://blobs-temp.sfo3...",
+    "blobUrlExpirationDate": "2024-03-04T08:04:02.4149309Z"
+  },
+  "scheduled": false
+}
+
+
+```
+
+### `civitai.jobs.getByToken`
+
+Get jobs associated with a token.
+
+```js
+const response = await civitai.jobs.getByToken(token);
+```
+
+```json
+Response: {
+  "token": "W3siSm9icyI6WyIzZjA3MTU0OC00NmM2LTQwZDUtOGU1YS0yMTBhYTZiOGJjY2MiXX1d",
+  "jobs": [
+    {
+      "jobId": "3f071548-46c6-40d5-8e5a-210aa6b8bccc",
+      "cost": 1.2000000000000002,
+      "result": {
+        "blobKey": "27E0CD13EC240389EFB9A9C25EB29DC3B4AB74A973F132D6A6DB076C8B210570",
+        "available": true,
+        "blobUrl": "https://blobs-temp.sfo3...",
+        "blobUrlExpirationDate": "2024-03-04T08:00:44.8268514Z"
+      },
+      "scheduled": false
+    }
+  ]
+}
+
+```
+
+### `civitai.jobs.getByQuery`
+
+Retrieve a collection of jobs by quering properties, e.g., `userId`. You can optionally include a `detailed` boolean flag to get detailed information about the jobs.
+
+```js
+const query: QueryJobsRequest = {
+  properties: {
+    userId: 4, // Querying bu userId
+  },
+};
+const detailed = false; // Optional boolean flag to get detailed job definitions. False by default.
+const response = await civitai.jobs.getByQuery(query, detailed);
+```
+
+```json
+Response: {
+  "jobs": [
+    {
+      "jobId": "AA588B7B3EC68D88A02501121A08499E4B41664820C0F8D12F4119D8C49C04C9",
+      "cost": 1.54375,
+      "properties": {
+        "userId": 4,
+        "requestId": -1,
+        "RequestId": "eb6a8c28-c806-42e2-a349-5325702a1a96"
+      },
+      "result": {
+        "blobKey": "AA588B7B3EC68D88A02501121A08499E4B41664820C0F8D12F4119D8C49C04C9",
+        "available": false
+      },
+      "serviceProviders": {},
+      "scheduled": false
+    },
+    {
+      "jobId": "59B1C81ACFA3E55B9C60BCB6472DF271F3698CC0FFE154E76C7B27D5AD1934AF",
+      "cost": 1.54375,
+      "properties": {
+        "userId": 4,
+        "requestId": -1,
+        "RequestId": "eb6a8c28-c806-42e2-a349-5325702a1a96"
+      },
+    },
+    ...
+  ],
+}
+```
 
 ### `civitai.jobs.cancel`
 
