@@ -238,7 +238,7 @@ Retrieve a collection of jobs by quering properties, e.g., `userId`. You can opt
 ```js
 const query: QueryJobsRequest = {
   properties: {
-    userId: 4, // Querying bu userId
+    userId: 4, // Querying by userId
   },
 };
 const detailed = false; // Optional boolean flag to get detailed job definitions. False by default.
