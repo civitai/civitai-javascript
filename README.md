@@ -188,7 +188,7 @@ const response = await civitai.jobs.getById(jobId);
 ```
 
 ```json
-Response: {
+{
   "jobId": "3f071548-46c6-40d5-8e5a-210aa6b8bccc",
   "cost": 1.2000000000000002,
   "result": {
@@ -212,7 +212,7 @@ const response = await civitai.jobs.getByToken(token);
 ```
 
 ```json
-Response: {
+{
   "token": "W3siSm9icyI6WyIzZjA3MTU0OC00NmM2LTQwZDUtOGU1YS0yMTBhYTZiOGJjY2MiXX1d",
   "jobs": [
     {
@@ -246,7 +246,7 @@ const response = await civitai.jobs.getByQuery(query, detailed);
 ```
 
 ```json
-Response: {
+{
   "jobs": [
     {
       "jobId": "AA588B7B3EC68D88A02501121A08499E4B41664820C0F8D12F4119D8C49C04C9",
@@ -272,7 +272,6 @@ Response: {
         "RequestId": "eb6a8c28-c806-42e2-a349-5325702a1a96"
       },
     },
-    ...
   ],
 }
 ```
@@ -309,8 +308,8 @@ const coverage = await civitai.models.get(models);
 console.log("Model coverage: ", coverage);
 ```
 
-```
-Model Coverage: {
+```json
+{
   "urn:air:sd1:checkpoint:civitai:107842@275408": {
     "availability": "Unavailable",
     "workers": 0
