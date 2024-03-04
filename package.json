@@ -1,6 +1,6 @@
 {
   "name": "civitai",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "JavaScript client for Civitai's generator",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
