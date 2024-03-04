@@ -32,7 +32,10 @@ class Civitai {
   jobs: {
     getByToken: (token: string) => Promise<JobStatusCollection>;
     getById: (jobId: string) => Promise<JobStatus>;
-    getByQuery: (query: QueryJobsRequest) => Promise<QueryJobsResult>;
+    getByQuery: (
+      query: QueryJobsRequest,
+      detailed?: boolean
+    ) => Promise<QueryJobsResult>;
     cancel: (jobId: string) => Promise<any | ProblemDetails>;
   };
   models: {
@@ -168,7 +171,7 @@ class Civitai {
         return modifiedResponse;
       },
 
-      // Fetch job status by token
+      // Fetch jobs by token
       getByToken: async (token: string) => {
         const response = await JobsService.getV1ConsumerJobs(token);
         const modifiedResponse = response.jobs?.map((job) => ({
@@ -180,11 +183,8 @@ class Civitai {
         return { token, jobs: modifiedResponse };
       },
 
-      // Fetch job status by query
-      getByQuery: async (
-        query: QueryJobsRequest,
-        detailed: boolean = false
-      ) => {
+      // Fetch jobs by query
+      getByQuery: async (query: QueryJobsRequest, detailed = false) => {
         try {
           const response = await JobsService.postV1ConsumerJobsQuery(
             detailed,
