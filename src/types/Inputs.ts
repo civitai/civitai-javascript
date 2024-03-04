@@ -1,8 +1,8 @@
 // Interfaces for configuration and input types
 
-import { ImageJobControlNet } from "./ImageJobControlNet";
-import { ImageJobNetworkParams } from "./ImageJobNetworkParams";
-import { Scheduler } from "./Scheduler";
+import { ImageJobControlNet } from "src/models/ImageJobControlNet";
+import { ImageJobNetworkParams } from "src/models/ImageJobNetworkParams";
+import { Scheduler } from "src/models/Scheduler";
 
 export interface CivitaiConfig {
   auth: string;

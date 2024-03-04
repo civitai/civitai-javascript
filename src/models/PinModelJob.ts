@@ -2,9 +2,10 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { ImageJobNetworkParams } from './ImageJobNetworkParams';
 import type { Job } from './Job';
-export type ImageEmbeddingJob = (Job & {
-    imageUrl?: string | null;
+export type PinModelJob = (Job & {
+    assets?: Record<string, ImageJobNetworkParams> | null;
     readonly type?: string | null;
 });
 

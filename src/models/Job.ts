@@ -2,45 +2,48 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { FixedPriority } from "./FixedPriority";
-import type { Provider } from "./Provider";
-import type { RangedPriority } from "./RangedPriority";
-import type { TimeSpan } from "./TimeSpan";
+import type { TimeSpan } from './TimeSpan';
 export type Job = {
-  $type: string;
-  /**
-   * Get or set the name of this job so that it can be referenced by other jobs
-   */
-  name?: string | null;
-  /**
-   * Get or set a priority where lower values have priority over higher values
-   */
-  priority?: (FixedPriority | RangedPriority) | null;
-  /**
-   * Get or set a list of service providers to target with this job
-   * If not specified then all providers will be targeted
-   */
-  providers?: Array<Provider> | null;
-  /**
-   * An optional expiration date for this job
-   */
-  expireAt?: string | null;
-  /**
-   * A dictionary of user defined properties that are associated with this job template
-   */
-  properties?: Record<string, any> | null;
-  /**
-   * Get or set a url that will be invoked upon completion of this job
-   */
-  callbackUrl?: string | null;
-  timeout?: TimeSpan;
-  /**
-   * The max number of retries before we give up
-   */
-  retries?: number | null;
-  /**
-   * Get or set a list of dependencies that this job has
-   * These are the names of jobs that this job is dependent upon
-   */
-  dependencies?: Array<string> | null;
+    /**
+     * A unique id for this job
+     */
+    id?: string | null;
+    /**
+     * The date when this job got created
+     */
+    createdAt?: string;
+    /**
+     * The date for when this job was set to expire
+     */
+    expireAt?: string | null;
+    /**
+     * A webhook to be invoked when the job receives a status update
+     */
+    webhook?: string | null;
+    /**
+     * A set of user defined properties that can be used to index and partition this job
+     */
+    properties?: Record<string, any> | null;
+    /**
+     * The type of this job as a string
+     */
+    readonly type?: string | null;
+    /**
+     * Get a cost estimate for this job
+     */
+    readonly cost?: number;
+    /**
+     * The max number of retries before we give up
+     */
+    maxRetryAttempt?: number;
+    /**
+     * Get or set a list of dependencies that this job has
+     */
+    dependencies?: Array<string> | null;
+    /**
+     * Get or set the name of the consumer that issued this job
+     */
+    issuedBy?: string | null;
+    claimDuration?: TimeSpan;
 };
+

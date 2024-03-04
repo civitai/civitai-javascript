@@ -18,33 +18,27 @@ describe("Create FromText Job", () => {
     const input: FromTextInput = {
       model: "urn:air:sd1:checkpoint:civitai:4201@130072",
       params: {
-        prompt:
-          "masterpiece, best quality, 1girl, IncrsAhri, multiple tails, fox tail, korean clothes, skirt, braid, arms behind back, seductive smile",
-        negativePrompt:
-          "(worst quality:1.4), (low quality:1.4), simple background, bad anatomy",
-        scheduler: Scheduler.EULER_A,
-        steps: 25,
-        cfgScale: 7,
-        width: 512,
-        height: 768,
+        prompt: "A cat",
+        negativePrompt: "A dog",
+        scheduler: "EulerA" as Scheduler,
+        steps: 30,
+        cfgScale: 10,
+        width: 768,
+        height: 512,
         seed: -1,
-        clipSkip: 2,
+        clipSkip: 1,
       },
-      quantity: 1,
-      // properties: {
-      //   userId: 69,
-      // },
       // additionalNetworks: {
-      //   "urn:air:sd1:lora:civitai:162141@182559": {
+      //   "civitai:58390@62833": {
       //     type: AssetType.LORA,
-      //     strength: 1.0,
+      //     strength: 1,
       //   },
       // },
-      // callbackUrl: "https://4a1e-104-222-28-153.ngrok-free.app/api/webhook",
+      quantity: 1,
     };
     // Long polling as we pass in `wait` parameter
     const output = await civitai.image.fromText(input, true);
     console.log("Response:", JSON.stringify(output, null, 2));
     expect(output).toBeDefined();
-  }, 40000);
+  }, 60000);
 });

@@ -13,6 +13,7 @@ import type { TaintJobsResult } from "../models/TaintJobsResult";
 import type { CancelablePromise } from "../core/CancelablePromise";
 import { OpenAPI } from "../core/OpenAPI";
 import { request as __request } from "../core/request";
+import { JobStatus } from "src/models/JobStatus";
 export class JobsService {
   /**
    * Submits a new job for processing
@@ -48,6 +49,7 @@ export class JobsService {
    * @param wait Whether to wait for the job to complete before returning or to return immediatly
    * The request may return a 202 if the clients waits for the job to complete and the job does not complete within the requested timeout.
    * In which case the client should use the token to query the status of the job.
+   * @param detailed Wether to include the job specification upon response
    * @param requestBody
    * @returns JobStatusCollection Success
    * @returns ProblemDetails Error
@@ -56,6 +58,7 @@ export class JobsService {
    */
   public static postV1ConsumerJobs(
     wait?: boolean,
+    detailed?: boolean,
     requestBody?: JobTemplateList
   ): CancelablePromise<JobStatusCollection | ProblemDetails | any> {
     return __request(OpenAPI, {
@@ -63,6 +66,7 @@ export class JobsService {
       url: "/v1/consumer/jobs",
       query: {
         wait: wait,
+        detailed: detailed,
       },
       body: requestBody,
       mediaType: "application/json",
@@ -77,12 +81,14 @@ export class JobsService {
    * @param wait Whether to wait for the job to complete before returning or to return immediatly
    * The request may return a 202 if the clients waits for the job to complete and the job does not complete within the requested timeout.
    * In which case the client should use the token to query the status of the job.
+   * @param detailed Whether to include the job definition
    * @returns JobStatusCollection Success
    * @throws ApiError
    */
   public static getV1ConsumerJobs(
     token: string,
-    wait?: boolean
+    wait?: boolean,
+    detailed?: boolean
   ): CancelablePromise<JobStatusCollection> {
     return __request(OpenAPI, {
       method: "GET",
@@ -90,6 +96,7 @@ export class JobsService {
       query: {
         token: token,
         wait: wait,
+        detailed: detailed,
       },
       errors: {
         400: `Bad Request`,
@@ -148,14 +155,15 @@ export class JobsService {
   /**
    * Get the status of a job by looking up the jobId
    * @param jobId
-   * @param token
+   * @param detailed
    * @returns JobStatusCollection Success
+   * @returns ProblemDetails Error
    * @throws ApiError
    */
   public static getV1ConsumerJobs1(
     jobId: string,
-    token?: string
-  ): CancelablePromise<JobStatusCollection> {
+    detailed?: boolean
+  ): CancelablePromise<JobStatus> {
     return __request(OpenAPI, {
       method: "GET",
       url: "/v1/consumer/jobs/{jobId}",
@@ -163,10 +171,10 @@ export class JobsService {
         jobId: jobId,
       },
       query: {
-        token: token,
+        detailed: detailed,
       },
       errors: {
-        400: `Bad Request`,
+        404: `Not Found`,
       },
     });
   }
@@ -223,16 +231,21 @@ export class JobsService {
   }
   /**
    * Query for previously submitted jobs by looking up the properties
+   * @param detailed Wether to include the original job definition
    * @param requestBody
    * @returns QueryJobsResult Success
    * @throws ApiError
    */
   public static postV1ConsumerJobsQuery(
+    detailed?: boolean,
     requestBody?: QueryJobsRequest
   ): CancelablePromise<QueryJobsResult> {
     return __request(OpenAPI, {
       method: "POST",
       url: "/v1/consumer/jobs/query",
+      query: {
+        detailed: detailed,
+      },
       body: requestBody,
       mediaType: "application/json",
     });

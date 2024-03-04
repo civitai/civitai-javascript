@@ -2,35 +2,23 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { ClearAsset } from "./ClearAsset";
-import type { ComfyJob } from "./ComfyJob";
-import type { CopyAsset } from "./CopyAsset";
-import type { DeleteBlob } from "./DeleteBlob";
-import type { GetBlob } from "./GetBlob";
-import type { ImageEmbeddingJob } from "./ImageEmbeddingJob";
-import type { ImageResourceTrainingJob } from "./ImageResourceTrainingJob";
-import type { ImageTransformJob } from "./ImageTransformJob";
-import type { PinBlob } from "./PinBlob";
-import type { PrepareModelJob } from "./PrepareModelJob";
-import type { TextToImageJob } from "./TextToImageJob";
-import type { UnpinBlob } from "./UnpinBlob";
-import type { UploadBlob } from "./UploadBlob";
-import type { WDTaggingJob } from "./WDTaggingJob";
+import type { ClearAssetRequest } from './ClearAssetRequest';
+import type { ComfyJobRequest } from './ComfyJobRequest';
+import type { CopyAssetRequest } from './CopyAssetRequest';
+import type { DeleteBlobRequest } from './DeleteBlobRequest';
+import type { GetBlobRequest } from './GetBlobRequest';
+import type { ImageEmbeddingJobRequest } from './ImageEmbeddingJobRequest';
+import type { ImageResourceTrainingJobRequest } from './ImageResourceTrainingJobRequest';
+import type { ImageTransformJobRequest } from './ImageTransformJobRequest';
+import type { MediaTaggingJobRequest } from './MediaTaggingJobRequest';
+import type { PinBlobRequest } from './PinBlobRequest';
+import type { PrepareModelJobRequest } from './PrepareModelJobRequest';
+import type { RebootWorkerJobRequest } from './RebootWorkerJobRequest';
+import type { TextToImageJobRequest } from './TextToImageJobRequest';
+import type { UnpinBlobRequest } from './UnpinBlobRequest';
+import type { UploadBlobRequest } from './UploadBlobRequest';
+import type { WDTaggingJobRequest } from './WDTaggingJobRequest';
 export type JobTemplateList = {
-  jobs?: Array<
-    | TextToImageJob
-    | ImageResourceTrainingJob
-    | UploadBlob
-    | GetBlob
-    | PinBlob
-    | UnpinBlob
-    | DeleteBlob
-    | ImageTransformJob
-    | CopyAsset
-    | ClearAsset
-    | WDTaggingJob
-    | PrepareModelJob
-    | ComfyJob
-    | ImageEmbeddingJob
-  >;
+    jobs?: Array<(TextToImageJobRequest | ImageResourceTrainingJobRequest | UploadBlobRequest | GetBlobRequest | PinBlobRequest | UnpinBlobRequest | DeleteBlobRequest | ImageTransformJobRequest | CopyAssetRequest | ClearAssetRequest | WDTaggingJobRequest | MediaTaggingJobRequest | PrepareModelJobRequest | ComfyJobRequest | ImageEmbeddingJobRequest | RebootWorkerJobRequest)>;
 };
+

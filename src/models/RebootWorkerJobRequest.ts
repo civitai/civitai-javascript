@@ -2,7 +2,6 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export enum PrepareModelAction {
-    UPLOAD = 'Upload',
-    PIN = 'Pin',
-}
+import type { JobRequest } from './JobRequest';
+export type RebootWorkerJobRequest = JobRequest;
+

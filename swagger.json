@@ -5,11 +5,44 @@
     "version": "v1"
   },
   "paths": {
+    "/v1/consumer/consumption": {
+      "get": {
+        "tags": ["Consumption"],
+        "parameters": [
+          {
+            "name": "startDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConsumptionDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/consumer/coverage": {
       "get": {
-        "tags": [
-          "Coverage"
-        ],
+        "tags": ["Coverage"],
         "summary": "Get coverage of particular models",
         "parameters": [
           {
@@ -43,9 +76,7 @@
     },
     "/v1/consumer/jobs": {
       "post": {
-        "tags": [
-          "Jobs"
-        ],
+        "tags": ["Jobs"],
         "summary": "Submits a new job for processing",
         "description": "Sample request:\r\n            \r\n    POST /v1/consumer/jobs\r\n    {\r\n      \"$type\": \"textToImage\",\r\n      \"model\": \"urn:air:sdxl:model:civitai:4201@130072\",\r\n      \"params\": {\r\n          \"prompt\": \"A cat\",\r\n          \"negativePrompt\": \"A dog\",\r\n          \"scheduler\": \"EulerA\",\r\n          \"steps\": 30,\r\n          \"cfgScale\": 10,\r\n          \"width\": 1216,\r\n          \"height\": 832,\r\n          \"seed\": -1,\r\n          \"clipSkip\": 1\r\n      },\r\n      \"additionalNetworks\": {\r\n        \"civitai:58390@62833\": {\r\n          \"type\": \"Lora\",\r\n          \"strength\": 1\r\n        }\r\n      },\r\n      \"quantity\": 1,\r\n      \"priority\": {\r\n          \"min\": 2,\r\n          \"max\": 8\r\n      }\r\n    }",
         "parameters": [
@@ -53,6 +84,14 @@
             "name": "wait",
             "in": "query",
             "description": "Whether to wait for the job to complete before returning or to return immediatly\r\nThe request may return a 202 if the clients waits for the job to complete and the job does not complete within the requested timeout. \r\nIn which case the client should use the token to query the status of the job.",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "detailed",
+            "in": "query",
+            "description": "Wether to include the job specification upon response",
             "schema": {
               "type": "boolean"
             }
@@ -67,10 +106,51 @@
               },
               "examples": {
                 "Simple SDXL job": {
-                  "value": {"quantity":1,"model":"urn:air:sdxl:model:civitai:101055@128078","additionalNetworks":{},"controlNets":[],"params":{"prompt":"A curious cat","negativePrompt":"Blurred","scheduler":"LMS","steps":30,"cfgScale":10,"width":1216,"height":832,"seed":-1,"clipSkip":2},"priority":5,"providers":[]}
+                  "value": {
+                    "quantity": 1,
+                    "model": "urn:air:sdxl:model:civitai:101055@128078",
+                    "additionalNetworks": {},
+                    "controlNets": [],
+                    "params": {
+                      "prompt": "A curious cat",
+                      "negativePrompt": "Blurred",
+                      "scheduler": "LMS",
+                      "steps": 30,
+                      "cfgScale": 10,
+                      "width": 1216,
+                      "height": 832,
+                      "seed": -1,
+                      "clipSkip": 2
+                    },
+                    "priority": 5,
+                    "providers": []
+                  }
                 },
                 "Simple SDXL job with Lora and Textual Inversion applied": {
-                  "value": {"quantity":1,"model":"urn:air:sdxl:model:civitai:101055@128078","additionalNetworks":{"civitai:120096@135931":{"type":"Lora","strength":1.5}},"controlNets":[],"params":{"prompt":"A curious cat","negativePrompt":"Blurred","scheduler":"LMS","steps":30,"cfgScale":10,"width":1216,"height":832,"seed":-1,"clipSkip":2},"priority":5,"providers":[]}
+                  "value": {
+                    "quantity": 1,
+                    "model": "urn:air:sdxl:model:civitai:101055@128078",
+                    "additionalNetworks": {
+                      "civitai:120096@135931": {
+                        "type": "Lora",
+                        "strength": 1.5
+                      }
+                    },
+                    "controlNets": [],
+                    "params": {
+                      "prompt": "A curious cat",
+                      "negativePrompt": "Blurred",
+                      "scheduler": "LMS",
+                      "steps": 30,
+                      "cfgScale": 10,
+                      "width": 1216,
+                      "height": 832,
+                      "seed": -1,
+                      "clipSkip": 2
+                    },
+                    "priority": 5,
+                    "providers": []
+                  }
                 }
               }
             },
@@ -80,10 +160,51 @@
               },
               "examples": {
                 "Simple SDXL job": {
-                  "value": {"quantity":1,"model":"urn:air:sdxl:model:civitai:101055@128078","additionalNetworks":{},"controlNets":[],"params":{"prompt":"A curious cat","negativePrompt":"Blurred","scheduler":"LMS","steps":30,"cfgScale":10,"width":1216,"height":832,"seed":-1,"clipSkip":2},"priority":5,"providers":[]}
+                  "value": {
+                    "quantity": 1,
+                    "model": "urn:air:sdxl:model:civitai:101055@128078",
+                    "additionalNetworks": {},
+                    "controlNets": [],
+                    "params": {
+                      "prompt": "A curious cat",
+                      "negativePrompt": "Blurred",
+                      "scheduler": "LMS",
+                      "steps": 30,
+                      "cfgScale": 10,
+                      "width": 1216,
+                      "height": 832,
+                      "seed": -1,
+                      "clipSkip": 2
+                    },
+                    "priority": 5,
+                    "providers": []
+                  }
                 },
                 "Simple SDXL job with Lora and Textual Inversion applied": {
-                  "value": {"quantity":1,"model":"urn:air:sdxl:model:civitai:101055@128078","additionalNetworks":{"civitai:120096@135931":{"type":"Lora","strength":1.5}},"controlNets":[],"params":{"prompt":"A curious cat","negativePrompt":"Blurred","scheduler":"LMS","steps":30,"cfgScale":10,"width":1216,"height":832,"seed":-1,"clipSkip":2},"priority":5,"providers":[]}
+                  "value": {
+                    "quantity": 1,
+                    "model": "urn:air:sdxl:model:civitai:101055@128078",
+                    "additionalNetworks": {
+                      "civitai:120096@135931": {
+                        "type": "Lora",
+                        "strength": 1.5
+                      }
+                    },
+                    "controlNets": [],
+                    "params": {
+                      "prompt": "A curious cat",
+                      "negativePrompt": "Blurred",
+                      "scheduler": "LMS",
+                      "steps": 30,
+                      "cfgScale": 10,
+                      "width": 1216,
+                      "height": 832,
+                      "seed": -1,
+                      "clipSkip": 2
+                    },
+                    "priority": 5,
+                    "providers": []
+                  }
                 }
               }
             },
@@ -93,10 +214,51 @@
               },
               "examples": {
                 "Simple SDXL job": {
-                  "value": {"quantity":1,"model":"urn:air:sdxl:model:civitai:101055@128078","additionalNetworks":{},"controlNets":[],"params":{"prompt":"A curious cat","negativePrompt":"Blurred","scheduler":"LMS","steps":30,"cfgScale":10,"width":1216,"height":832,"seed":-1,"clipSkip":2},"priority":5,"providers":[]}
+                  "value": {
+                    "quantity": 1,
+                    "model": "urn:air:sdxl:model:civitai:101055@128078",
+                    "additionalNetworks": {},
+                    "controlNets": [],
+                    "params": {
+                      "prompt": "A curious cat",
+                      "negativePrompt": "Blurred",
+                      "scheduler": "LMS",
+                      "steps": 30,
+                      "cfgScale": 10,
+                      "width": 1216,
+                      "height": 832,
+                      "seed": -1,
+                      "clipSkip": 2
+                    },
+                    "priority": 5,
+                    "providers": []
+                  }
                 },
                 "Simple SDXL job with Lora and Textual Inversion applied": {
-                  "value": {"quantity":1,"model":"urn:air:sdxl:model:civitai:101055@128078","additionalNetworks":{"civitai:120096@135931":{"type":"Lora","strength":1.5}},"controlNets":[],"params":{"prompt":"A curious cat","negativePrompt":"Blurred","scheduler":"LMS","steps":30,"cfgScale":10,"width":1216,"height":832,"seed":-1,"clipSkip":2},"priority":5,"providers":[]}
+                  "value": {
+                    "quantity": 1,
+                    "model": "urn:air:sdxl:model:civitai:101055@128078",
+                    "additionalNetworks": {
+                      "civitai:120096@135931": {
+                        "type": "Lora",
+                        "strength": 1.5
+                      }
+                    },
+                    "controlNets": [],
+                    "params": {
+                      "prompt": "A curious cat",
+                      "negativePrompt": "Blurred",
+                      "scheduler": "LMS",
+                      "steps": 30,
+                      "cfgScale": 10,
+                      "width": 1216,
+                      "height": 832,
+                      "seed": -1,
+                      "clipSkip": 2
+                    },
+                    "priority": 5,
+                    "providers": []
+                  }
                 }
               }
             }
@@ -139,9 +301,7 @@
         }
       },
       "get": {
-        "tags": [
-          "Jobs"
-        ],
+        "tags": ["Jobs"],
         "summary": "Get the status of a previous submitted request by looking up the token",
         "parameters": [
           {
@@ -157,6 +317,14 @@
             "name": "wait",
             "in": "query",
             "description": "Whether to wait for the job to complete before returning or to return immediatly\r\nThe request may return a 202 if the clients waits for the job to complete and the job does not complete within the requested timeout. \r\nIn which case the client should use the token to query the status of the job.",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "detailed",
+            "in": "query",
+            "description": "Whether to include the job definition",
             "schema": {
               "type": "boolean"
             }
@@ -196,9 +364,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Jobs"
-        ],
+        "tags": ["Jobs"],
         "summary": "Taint all jobs that match particular properties or belong to a token",
         "parameters": [
           {
@@ -265,9 +431,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Jobs"
-        ],
+        "tags": ["Jobs"],
         "summary": "Cancel all jobs associated with a token",
         "parameters": [
           {
@@ -318,9 +482,7 @@
     },
     "/v1/consumer/jobs/{jobId}": {
       "get": {
-        "tags": [
-          "Jobs"
-        ],
+        "tags": ["Jobs"],
         "summary": "Get the status of a job by looking up the jobId",
         "parameters": [
           {
@@ -333,11 +495,11 @@
             }
           },
           {
-            "name": "token",
+            "name": "detailed",
             "in": "query",
             "description": "",
             "schema": {
-              "type": "string"
+              "type": "boolean"
             }
           }
         ],
@@ -352,18 +514,18 @@
               }
             }
           },
-          "202": {
-            "description": "Accepted",
+          "404": {
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/JobStatusCollection"
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
           },
-          "400": {
-            "description": "Bad Request",
+          "default": {
+            "description": "Error",
             "content": {
               "application/json": {
                 "schema": {
@@ -375,9 +537,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Jobs"
-        ],
+        "tags": ["Jobs"],
         "summary": "Taint a specific job by its id",
         "parameters": [
           {
@@ -435,9 +595,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Jobs"
-        ],
+        "tags": ["Jobs"],
         "summary": "Cancels a specific job by looking it up by jobId",
         "parameters": [
           {
@@ -488,10 +646,18 @@
     },
     "/v1/consumer/jobs/query": {
       "post": {
-        "tags": [
-          "Jobs"
-        ],
+        "tags": ["Jobs"],
         "summary": "Query for previously submitted jobs by looking up the properties",
+        "parameters": [
+          {
+            "name": "detailed",
+            "in": "query",
+            "description": "Wether to include the original job definition",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
         "requestBody": {
           "description": "",
           "content": {
@@ -661,27 +827,18 @@
         "type": "string"
       },
       "BaseModel": {
-        "enum": [
-          "SD_1_5",
-          "SDXL"
-        ],
+        "enum": ["SD_1_5", "SDXL"],
         "type": "string"
       },
       "CallingConventions": {
-        "enum": [
-          "Standard",
-          "VarArgs",
-          "Any",
-          "HasThis",
-          "ExplicitThis"
-        ],
+        "enum": ["Standard", "VarArgs", "Any", "HasThis", "ExplicitThis"],
         "type": "string"
       },
-      "ClearAsset": {
+      "ClearAssetRequest": {
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schemas/Job"
+            "$ref": "#/components/schemas/JobRequest"
           }
         ],
         "properties": {
@@ -703,7 +860,32 @@
         "properties": {
           "params": {
             "type": "object",
-            "additionalProperties": { },
+            "additionalProperties": {},
+            "description": "A untyped set of parameters that are associated with this job",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "claimDuration": {
+            "$ref": "#/components/schemas/TimeSpan"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ComfyJobRequest": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/JobRequest"
+          }
+        ],
+        "properties": {
+          "params": {
+            "type": "object",
+            "additionalProperties": {},
             "description": "A untyped set of parameters that are associated with this job",
             "nullable": true
           }
@@ -842,11 +1024,35 @@
         },
         "additionalProperties": false
       },
-      "CopyAsset": {
+      "ConsumptionDetails": {
+        "type": "object",
+        "properties": {
+          "images": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalCost": {
+            "type": "number",
+            "format": "double"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CopyAssetRequest": {
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schemas/Job"
+            "$ref": "#/components/schemas/JobRequest"
           }
         ],
         "properties": {
@@ -930,11 +1136,11 @@
         },
         "additionalProperties": false
       },
-      "DeleteBlob": {
+      "DeleteBlobRequest": {
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schemas/Job"
+            "$ref": "#/components/schemas/JobRequest"
           }
         ],
         "properties": {
@@ -947,11 +1153,7 @@
         "additionalProperties": false
       },
       "EventAttributes": {
-        "enum": [
-          "None",
-          "SpecialName",
-          "RTSpecialName"
-        ],
+        "enum": ["None", "SpecialName", "RTSpecialName"],
         "type": "string"
       },
       "EventInfo": {
@@ -1030,7 +1232,7 @@
           },
           "data": {
             "type": "object",
-            "additionalProperties": { },
+            "additionalProperties": {},
             "nullable": true,
             "readOnly": true
           },
@@ -1216,11 +1418,11 @@
         ],
         "type": "string"
       },
-      "GetBlob": {
+      "GetBlobRequest": {
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schemas/Job"
+            "$ref": "#/components/schemas/JobRequest"
           }
         ],
         "properties": {
@@ -1244,6 +1446,26 @@
         "allOf": [
           {
             "$ref": "#/components/schemas/Job"
+          }
+        ],
+        "properties": {
+          "imageUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ImageEmbeddingJobRequest": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/JobRequest"
           }
         ],
         "properties": {
@@ -1306,10 +1528,7 @@
         "additionalProperties": false
       },
       "ImageJobParams": {
-        "required": [
-          "height",
-          "width"
-        ],
+        "required": ["height", "width"],
         "type": "object",
         "properties": {
           "prompt": {
@@ -1371,6 +1590,57 @@
         "properties": {
           "model": {
             "type": "string",
+            "nullable": true
+          },
+          "trainingData": {
+            "type": "string",
+            "description": "A url referring data that needs to be trained upon",
+            "format": "uri",
+            "nullable": true
+          },
+          "params": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "A untyped set of parameters that are associated with this job",
+            "nullable": true
+          },
+          "cost": {
+            "type": "number",
+            "description": "Get cost associated with this job",
+            "format": "double",
+            "readOnly": true
+          },
+          "customCost": {
+            "type": "number",
+            "description": "Get or set a custom cost value for this job",
+            "format": "double"
+          },
+          "output": {
+            "type": "string",
+            "description": "An application provided output of the current status of this job",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "claimDuration": {
+            "$ref": "#/components/schemas/TimeSpan"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ImageResourceTrainingJobRequest": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/JobRequest"
+          }
+        ],
+        "properties": {
+          "model": {
+            "type": "string",
             "description": "The primary model to train upon",
             "nullable": true
           },
@@ -1382,7 +1652,7 @@
           },
           "params": {
             "type": "object",
-            "additionalProperties": { },
+            "additionalProperties": {},
             "description": "A untyped set of parameters that are associated with this job",
             "nullable": true
           }
@@ -1394,6 +1664,54 @@
         "allOf": [
           {
             "$ref": "#/components/schemas/Job"
+          }
+        ],
+        "properties": {
+          "imageUrl": {
+            "type": "string",
+            "description": "The url of the image to transform",
+            "format": "uri",
+            "nullable": true
+          },
+          "transformer": {
+            "$ref": "#/components/schemas/ImageTransformer"
+          },
+          "destinationBlobKey": {
+            "type": "string",
+            "description": "Get the key of the destination blob to upload the result to",
+            "nullable": true
+          },
+          "params": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "A untyped set of parameters that are associated with this job",
+            "nullable": true
+          },
+          "destinationUrl": {
+            "type": "string",
+            "description": "Get or set the URL where the transformed image will be uploaded to",
+            "format": "uri",
+            "nullable": true
+          },
+          "cost": {
+            "type": "number",
+            "description": "Get cost associated with this job",
+            "format": "double",
+            "readOnly": true
+          },
+          "type": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ImageTransformJobRequest": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/JobRequest"
           }
         ],
         "properties": {
@@ -1433,12 +1751,7 @@
         "additionalProperties": false
       },
       "ImageTransformer": {
-        "enum": [
-          "Canny",
-          "DepthZoe",
-          "SoftedgePidinet",
-          "Rembg"
-        ],
+        "enum": ["Canny", "DepthZoe", "SoftedgePidinet", "Rembg"],
         "type": "string"
       },
       "IntPtr": {
@@ -1446,9 +1759,164 @@
         "additionalProperties": false
       },
       "Job": {
-        "required": [
-          "$type"
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "A unique id for this job",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "The date when this job got created",
+            "format": "date-time"
+          },
+          "expireAt": {
+            "type": "string",
+            "description": "The date for when this job was set to expire",
+            "format": "date-time",
+            "nullable": true
+          },
+          "webhook": {
+            "type": "string",
+            "description": "A webhook to be invoked when the job receives a status update",
+            "format": "uri",
+            "nullable": true
+          },
+          "properties": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "A set of user defined properties that can be used to index and partition this job",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "description": "The type of this job as a string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "cost": {
+            "type": "number",
+            "description": "Get a cost estimate for this job",
+            "format": "double",
+            "readOnly": true
+          },
+          "maxRetryAttempt": {
+            "type": "integer",
+            "description": "The max number of retries before we give up",
+            "format": "int32"
+          },
+          "dependencies": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Get or set a list of dependencies that this job has",
+            "nullable": true
+          },
+          "issuedBy": {
+            "type": "string",
+            "description": "Get or set the name of the consumer that issued this job",
+            "nullable": true
+          },
+          "claimDuration": {
+            "$ref": "#/components/schemas/TimeSpan"
+          }
+        },
+        "additionalProperties": false
+      },
+      "JobEvent": {
+        "type": "object",
+        "properties": {
+          "jobId": {
+            "type": "string",
+            "nullable": true
+          },
+          "type": {
+            "$ref": "#/components/schemas/JobEventType"
+          },
+          "dateTime": {
+            "type": "string",
+            "description": "Get the absolute datetime on which this event got created",
+            "format": "date-time"
+          },
+          "provider": {
+            "$ref": "#/components/schemas/Provider"
+          },
+          "workerId": {
+            "type": "string",
+            "description": "Get or set the workerId that is associated with this event",
+            "nullable": true
+          },
+          "context": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "An optional set of key/value pairs that can be used to provide additional context.",
+            "nullable": true
+          },
+          "claimDuration": {
+            "$ref": "#/components/schemas/TimeSpan"
+          },
+          "jobDuration": {
+            "$ref": "#/components/schemas/TimeSpan"
+          },
+          "retryAttempt": {
+            "type": "integer",
+            "description": "The retry attempt of this job",
+            "format": "int32"
+          },
+          "cost": {
+            "type": "number",
+            "description": "The cost of the job associated with this event",
+            "format": "double"
+          },
+          "jobProperties": {
+            "type": "object",
+            "additionalProperties": {},
+            "description": "The properties of the job associated with this event",
+            "nullable": true
+          },
+          "jobType": {
+            "type": "string",
+            "description": "Get the type of the job",
+            "nullable": true
+          },
+          "jobPriority": {
+            "type": "integer",
+            "description": "The priority that is associated with this job",
+            "format": "int32"
+          },
+          "claimHasCompleted": {
+            "type": "boolean",
+            "description": "Get wether this event marks the completion of a claim",
+            "readOnly": true
+          },
+          "jobHasCompleted": {
+            "type": "boolean",
+            "description": "Get wether this event marks the completion of a job\r\nThis is determined based on the Civitai.Orchestration.Grains.Jobs.JobEvent.Type of this event",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "JobEventType": {
+        "enum": [
+          "Initialized",
+          "Claimed",
+          "Rejected",
+          "LateRejected",
+          "ClaimExpired",
+          "Updated",
+          "Failed",
+          "Succeeded",
+          "Expired",
+          "Deleted"
         ],
+        "type": "string"
+      },
+      "JobRequest": {
+        "required": ["$type"],
         "type": "object",
         "properties": {
           "$type": {
@@ -1522,125 +1990,82 @@
         "discriminator": {
           "propertyName": "$type",
           "mapping": {
-            "TextToImageJobTemplate": "#/components/schemas/TextToImageJob",
-            "ImageResourceTrainingJobTemplate": "#/components/schemas/ImageResourceTrainingJob",
-            "UploadBlobTemplate": "#/components/schemas/UploadBlob",
-            "GetBlobTemplate": "#/components/schemas/GetBlob",
-            "PinBlobTemplate": "#/components/schemas/PinBlob",
-            "UnpinBlobTemplate": "#/components/schemas/UnpinBlob",
-            "DeleteBlobTemplate": "#/components/schemas/DeleteBlob",
-            "ImageTransformJobTemplate": "#/components/schemas/ImageTransformJob",
-            "CopyAssetTemplate": "#/components/schemas/CopyAsset",
-            "ClearAssetTemplate": "#/components/schemas/ClearAsset",
-            "WDTaggingJobTemplate": "#/components/schemas/WDTaggingJob",
-            "PrepareModelJobTemplate": "#/components/schemas/PrepareModelJob",
-            "ComfyJobTemplate": "#/components/schemas/ComfyJob",
-            "ImageEmbeddingJobTemplate": "#/components/schemas/ImageEmbeddingJob"
+            "TextToImageJobTemplate": "#/components/schemas/TextToImageJobRequest",
+            "ImageResourceTrainingJobTemplate": "#/components/schemas/ImageResourceTrainingJobRequest",
+            "UploadBlobTemplate": "#/components/schemas/UploadBlobRequest",
+            "GetBlobTemplate": "#/components/schemas/GetBlobRequest",
+            "PinBlobTemplate": "#/components/schemas/PinBlobRequest",
+            "UnpinBlobTemplate": "#/components/schemas/UnpinBlobRequest",
+            "DeleteBlobTemplate": "#/components/schemas/DeleteBlobRequest",
+            "ImageTransformJobTemplate": "#/components/schemas/ImageTransformJobRequest",
+            "CopyAssetTemplate": "#/components/schemas/CopyAssetRequest",
+            "ClearAssetTemplate": "#/components/schemas/ClearAssetRequest",
+            "WDTaggingJobTemplate": "#/components/schemas/WDTaggingJobRequest",
+            "MediaTaggingJobTemplate": "#/components/schemas/MediaTaggingJobRequest",
+            "PrepareModelJobTemplate": "#/components/schemas/PrepareModelJobRequest",
+            "ComfyJobTemplate": "#/components/schemas/ComfyJobRequest",
+            "ImageEmbeddingJobTemplate": "#/components/schemas/ImageEmbeddingJobRequest",
+            "RebootWorkerJobTemplate": "#/components/schemas/RebootWorkerJobRequest"
           }
         }
-      },
-      "JobEvent": {
-        "type": "object",
-        "properties": {
-          "jobId": {
-            "type": "string",
-            "nullable": true
-          },
-          "type": {
-            "$ref": "#/components/schemas/JobEventType"
-          },
-          "dateTime": {
-            "type": "string",
-            "description": "Get the absolute datetime on which this event got created",
-            "format": "date-time"
-          },
-          "provider": {
-            "$ref": "#/components/schemas/Provider"
-          },
-          "workerId": {
-            "type": "string",
-            "description": "Get or set the workerId that is associated with this event",
-            "nullable": true
-          },
-          "context": {
-            "type": "object",
-            "additionalProperties": { },
-            "description": "An optional set of key/value pairs that can be used to provide additional context.",
-            "nullable": true
-          },
-          "claimDuration": {
-            "$ref": "#/components/schemas/TimeSpan"
-          },
-          "jobDuration": {
-            "$ref": "#/components/schemas/TimeSpan"
-          },
-          "retryAttempt": {
-            "type": "integer",
-            "description": "The retry attempt of this job",
-            "format": "int32"
-          },
-          "cost": {
-            "type": "number",
-            "description": "The cost of the job associated with this event",
-            "format": "double"
-          },
-          "jobProperties": {
-            "type": "object",
-            "additionalProperties": { },
-            "description": "The properties of the job associated with this event",
-            "nullable": true
-          },
-          "jobType": {
-            "type": "string",
-            "description": "Get the type of the job",
-            "nullable": true
-          },
-          "jobPriority": {
-            "type": "integer",
-            "description": "The priority that is associated with this job",
-            "format": "int32"
-          },
-          "claimHasCompleted": {
-            "type": "boolean",
-            "description": "Get wether this event marks the completion of a claim",
-            "readOnly": true
-          },
-          "jobHasCompleted": {
-            "type": "boolean",
-            "description": "Get wether this event marks the completion of a job\r\nThis is determined bsed on the Civitai.Orchestration.Grains.Jobs.JobEvent.Type of this event",
-            "readOnly": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "JobEventType": {
-        "enum": [
-          "Initialized",
-          "Claimed",
-          "Rejected",
-          "LateRejected",
-          "ClaimExpired",
-          "Updated",
-          "Failed",
-          "Succeeded",
-          "Expired",
-          "Deleted"
-        ],
-        "type": "string"
       },
       "JobStatus": {
         "type": "object",
         "properties": {
+          "job": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TextToImageJob"
+              },
+              {
+                "$ref": "#/components/schemas/PingJob"
+              },
+              {
+                "$ref": "#/components/schemas/ImageResourceTrainingJob"
+              },
+              {
+                "$ref": "#/components/schemas/ImageTransformJob"
+              },
+              {
+                "$ref": "#/components/schemas/WDTaggingJob"
+              },
+              {
+                "$ref": "#/components/schemas/MediaTaggingJob"
+              },
+              {
+                "$ref": "#/components/schemas/PrepareModelJob"
+              },
+              {
+                "$ref": "#/components/schemas/ComfyJob"
+              },
+              {
+                "$ref": "#/components/schemas/ImageEmbeddingJob"
+              },
+              {
+                "$ref": "#/components/schemas/PinModelJob"
+              },
+              {
+                "$ref": "#/components/schemas/RebootWorkerJob"
+              }
+            ],
+            "nullable": true
+          },
           "jobId": {
             "type": "string",
-            "description": "The id of the job associated with this request, or null if no job got submitted",
-            "nullable": true
+            "nullable": true,
+            "readOnly": true
           },
           "cost": {
             "type": "number",
-            "description": "The cost of this job.",
             "format": "double",
-            "nullable": true
+            "nullable": true,
+            "readOnly": true
+          },
+          "properties": {
+            "type": "object",
+            "additionalProperties": {},
+            "nullable": true,
+            "readOnly": true
           },
           "result": {
             "description": "A optional result of the job",
@@ -1684,11 +2109,7 @@
         "additionalProperties": false
       },
       "JobSupport": {
-        "enum": [
-          "Unsupported",
-          "Unavailable",
-          "Available"
-        ],
+        "enum": ["Unsupported", "Unavailable", "Available"],
         "type": "string"
       },
       "JobTemplateList": {
@@ -1699,46 +2120,52 @@
             "items": {
               "oneOf": [
                 {
-                  "$ref": "#/components/schemas/TextToImageJob"
+                  "$ref": "#/components/schemas/TextToImageJobRequest"
                 },
                 {
-                  "$ref": "#/components/schemas/ImageResourceTrainingJob"
+                  "$ref": "#/components/schemas/ImageResourceTrainingJobRequest"
                 },
                 {
-                  "$ref": "#/components/schemas/UploadBlob"
+                  "$ref": "#/components/schemas/UploadBlobRequest"
                 },
                 {
-                  "$ref": "#/components/schemas/GetBlob"
+                  "$ref": "#/components/schemas/GetBlobRequest"
                 },
                 {
-                  "$ref": "#/components/schemas/PinBlob"
+                  "$ref": "#/components/schemas/PinBlobRequest"
                 },
                 {
-                  "$ref": "#/components/schemas/UnpinBlob"
+                  "$ref": "#/components/schemas/UnpinBlobRequest"
                 },
                 {
-                  "$ref": "#/components/schemas/DeleteBlob"
+                  "$ref": "#/components/schemas/DeleteBlobRequest"
                 },
                 {
-                  "$ref": "#/components/schemas/ImageTransformJob"
+                  "$ref": "#/components/schemas/ImageTransformJobRequest"
                 },
                 {
-                  "$ref": "#/components/schemas/CopyAsset"
+                  "$ref": "#/components/schemas/CopyAssetRequest"
                 },
                 {
-                  "$ref": "#/components/schemas/ClearAsset"
+                  "$ref": "#/components/schemas/ClearAssetRequest"
                 },
                 {
-                  "$ref": "#/components/schemas/WDTaggingJob"
+                  "$ref": "#/components/schemas/WDTaggingJobRequest"
                 },
                 {
-                  "$ref": "#/components/schemas/PrepareModelJob"
+                  "$ref": "#/components/schemas/MediaTaggingJobRequest"
                 },
                 {
-                  "$ref": "#/components/schemas/ComfyJob"
+                  "$ref": "#/components/schemas/PrepareModelJobRequest"
                 },
                 {
-                  "$ref": "#/components/schemas/ImageEmbeddingJob"
+                  "$ref": "#/components/schemas/ComfyJobRequest"
+                },
+                {
+                  "$ref": "#/components/schemas/ImageEmbeddingJobRequest"
+                },
+                {
+                  "$ref": "#/components/schemas/RebootWorkerJobRequest"
                 }
               ]
             }
@@ -1747,12 +2174,58 @@
         "additionalProperties": false
       },
       "LayoutKind": {
-        "enum": [
-          "Sequential",
-          "Explicit",
-          "Auto"
-        ],
+        "enum": ["Sequential", "Explicit", "Auto"],
         "type": "string"
+      },
+      "MediaTaggingJob": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Job"
+          }
+        ],
+        "properties": {
+          "modelId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "mediaUrl": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true
+          },
+          "cost": {
+            "type": "number",
+            "format": "double",
+            "readOnly": true
+          },
+          "type": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "MediaTaggingJobRequest": {
+        "required": ["mediaUrl", "modelId"],
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/JobRequest"
+          }
+        ],
+        "properties": {
+          "modelId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "mediaUrl": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "additionalProperties": false
       },
       "MemberInfo": {
         "type": "object",
@@ -2178,12 +2651,7 @@
         "additionalProperties": false
       },
       "ModelValidationState": {
-        "enum": [
-          "Unvalidated",
-          "Invalid",
-          "Valid",
-          "Skipped"
-        ],
+        "enum": ["Unvalidated", "Invalid", "Valid", "Skipped"],
         "type": "string"
       },
       "Module": {
@@ -2333,11 +2801,11 @@
         },
         "additionalProperties": false
       },
-      "PinBlob": {
+      "PinBlobRequest": {
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schemas/Job"
+            "$ref": "#/components/schemas/JobRequest"
           }
         ],
         "properties": {
@@ -2349,10 +2817,47 @@
         },
         "additionalProperties": false
       },
-      "PrepareModelAction": {
-        "enum": [
-          "Upload"
+      "PinModelJob": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Job"
+          }
         ],
+        "properties": {
+          "assets": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ImageJobNetworkParams"
+            },
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PingJob": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Job"
+          }
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PrepareModelAction": {
+        "enum": ["Upload", "Pin"],
         "type": "string"
       },
       "PrepareModelJob": {
@@ -2360,6 +2865,32 @@
         "allOf": [
           {
             "$ref": "#/components/schemas/Job"
+          }
+        ],
+        "properties": {
+          "baseModel": {
+            "$ref": "#/components/schemas/BaseModel"
+          },
+          "model": {
+            "type": "string",
+            "nullable": true
+          },
+          "action": {
+            "$ref": "#/components/schemas/PrepareModelAction"
+          },
+          "type": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PrepareModelJobRequest": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/JobRequest"
           }
         ],
         "properties": {
@@ -2406,7 +2937,7 @@
             "nullable": true
           }
         },
-        "additionalProperties": { }
+        "additionalProperties": {}
       },
       "PropertyAttributes": {
         "enum": [
@@ -2569,7 +3100,7 @@
           },
           "properties": {
             "type": "object",
-            "additionalProperties": { },
+            "additionalProperties": {},
             "nullable": true
           }
         },
@@ -2626,6 +3157,31 @@
             "readOnly": true
           }
         },
+        "additionalProperties": false
+      },
+      "RebootWorkerJob": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Job"
+          }
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RebootWorkerJobRequest": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/JobRequest"
+          }
+        ],
         "additionalProperties": false
       },
       "RuntimeFieldHandle": {
@@ -2685,11 +3241,7 @@
         "type": "string"
       },
       "SecurityRuleSet": {
-        "enum": [
-          "None",
-          "Level1",
-          "Level2"
-        ],
+        "enum": ["None", "Level1", "Level2"],
         "type": "string"
       },
       "StructLayoutAttribute": {
@@ -2714,7 +3266,7 @@
           },
           "context": {
             "type": "object",
-            "additionalProperties": { },
+            "additionalProperties": {},
             "description": "An optional set of key/value pairs that can be used to provide additional context.",
             "nullable": true
           }
@@ -2730,7 +3282,7 @@
           },
           "context": {
             "type": "object",
-            "additionalProperties": { },
+            "additionalProperties": {},
             "nullable": true
           },
           "properties": {
@@ -2758,6 +3310,70 @@
         "allOf": [
           {
             "$ref": "#/components/schemas/Job"
+          }
+        ],
+        "properties": {
+          "model": {
+            "type": "string",
+            "nullable": true
+          },
+          "params": {
+            "$ref": "#/components/schemas/ImageJobParams"
+          },
+          "imageHash": {
+            "type": "string",
+            "nullable": true
+          },
+          "additionalNetworks": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ImageJobNetworkParams"
+            },
+            "description": "Get or set a associative list of additional networks. Each network is identified by a hash code",
+            "nullable": true
+          },
+          "destinationUrl": {
+            "type": "string",
+            "description": "Get or set the URL where the image will be uploaded to",
+            "format": "uri",
+            "nullable": true
+          },
+          "baseModel": {
+            "$ref": "#/components/schemas/BaseModel"
+          },
+          "storeAsBlob": {
+            "type": "boolean",
+            "description": "Wether to store the image as a blob or as a legacy image"
+          },
+          "controlNets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ImageJobControlNet"
+            },
+            "description": "Get or set a list of control nets that should be applied with this textToImage job",
+            "nullable": true
+          },
+          "cost": {
+            "type": "number",
+            "format": "double",
+            "readOnly": true
+          },
+          "claimDuration": {
+            "$ref": "#/components/schemas/TimeSpan"
+          },
+          "type": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TextToImageJobRequest": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/JobRequest"
           }
         ],
         "properties": {
@@ -3570,11 +4186,11 @@
         },
         "additionalProperties": false
       },
-      "UnpinBlob": {
+      "UnpinBlobRequest": {
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schemas/Job"
+            "$ref": "#/components/schemas/JobRequest"
           }
         ],
         "properties": {
@@ -3586,11 +4202,11 @@
         },
         "additionalProperties": false
       },
-      "UploadBlob": {
+      "UploadBlobRequest": {
         "type": "object",
         "allOf": [
           {
-            "$ref": "#/components/schemas/Job"
+            "$ref": "#/components/schemas/JobRequest"
           }
         ],
         "properties": {
@@ -3610,14 +4226,49 @@
         "additionalProperties": false
       },
       "WDTaggingJob": {
-        "required": [
-          "mediaUrl",
-          "model"
-        ],
         "type": "object",
         "allOf": [
           {
             "$ref": "#/components/schemas/Job"
+          }
+        ],
+        "properties": {
+          "model": {
+            "type": "string",
+            "nullable": true
+          },
+          "mediaUrl": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true
+          },
+          "threshold": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "cost": {
+            "type": "number",
+            "format": "double",
+            "readOnly": true
+          },
+          "claimDuration": {
+            "$ref": "#/components/schemas/TimeSpan"
+          },
+          "type": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "WDTaggingJobRequest": {
+        "required": ["mediaUrl", "model"],
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/JobRequest"
           }
         ],
         "properties": {
@@ -3638,12 +4289,7 @@
         "additionalProperties": false
       },
       "WorkerAssetAvailability": {
-        "enum": [
-          "Unknown",
-          "Unsupported",
-          "Unavailable",
-          "Available"
-        ],
+        "enum": ["Unknown", "Unsupported", "Unavailable", "Available"],
         "type": "string"
       }
     },
@@ -3658,7 +4304,7 @@
   },
   "security": [
     {
-      "ApiKey": [ ]
+      "ApiKey": []
     }
   ]
 }

@@ -3,10 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { Job } from './Job';
-export type UnpinBlob = (Job & {
-    /**
-     * Get or set the key of the blob to pin
-     */
-    key?: string | null;
+export type RebootWorkerJob = (Job & {
+    readonly type?: string | null;
 });
 

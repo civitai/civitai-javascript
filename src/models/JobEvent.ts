@@ -49,7 +49,7 @@ export type JobEvent = {
     readonly claimHasCompleted?: boolean;
     /**
      * Get wether this event marks the completion of a job
-     * This is determined bsed on the Civitai.Orchestration.Grains.Jobs.JobEvent.Type of this event
+     * This is determined based on the Civitai.Orchestration.Grains.Jobs.JobEvent.Type of this event
      */
     readonly jobHasCompleted?: boolean;
 };

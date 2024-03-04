@@ -3,8 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { Job } from './Job';
-export type ImageEmbeddingJob = (Job & {
-    imageUrl?: string | null;
+export type PingJob = (Job & {
     readonly type?: string | null;
 });
 

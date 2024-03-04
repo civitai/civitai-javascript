@@ -3,9 +3,13 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { Job } from './Job';
+import type { TimeSpan } from './TimeSpan';
 export type WDTaggingJob = (Job & {
-    model: string;
-    mediaUrl: string;
+    model?: string | null;
+    mediaUrl?: string | null;
     threshold?: number | null;
+    readonly cost?: number;
+    claimDuration?: TimeSpan;
+    readonly type?: string | null;
 });
 

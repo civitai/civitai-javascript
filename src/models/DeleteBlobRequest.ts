@@ -2,8 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { Job } from './Job';
-export type PinBlob = (Job & {
+import type { JobRequest } from './JobRequest';
+export type DeleteBlobRequest = (JobRequest & {
     /**
      * Get or set the key of the blob to pin
      */

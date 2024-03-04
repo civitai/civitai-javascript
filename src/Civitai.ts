@@ -1,21 +1,20 @@
-import { JobsService } from "./services/JobsService";
-import { CoverageService } from "./services/CoverageService";
 import { OpenAPI } from "./core/OpenAPI";
+
 import { AIR } from "./models/AIR";
 import { ProviderAssetAvailability } from "./models/ProviderAssetAvailability";
 import { JobStatusCollection } from "./models/JobStatusCollection";
 import { QueryJobsRequest } from "./models/QueryJobsRequest";
+import { QueryJobsResult } from "./models/QueryJobsResult";
 import { ProblemDetails } from "./models/ProblemDetails";
+
+import { JobsService } from "./services/JobsService";
+import { CoverageService } from "./services/CoverageService";
 
 import { fromTextSchema } from "./validation/ValidationSchemas";
 import { ZodError } from "zod";
 
-import {
-  CivitaiConfig,
-  FromComfyInput,
-  FromTextInput,
-} from "./models/InputTypes";
-import { QueryJobsResult } from "./models/QueryJobsResult";
+import { CivitaiConfig, FromComfyInput, FromTextInput } from "./types/Inputs";
+import { JobStatus } from "./models/JobStatus";
 
 // Main class for interacting with Civitai services
 class Civitai {
@@ -31,7 +30,9 @@ class Civitai {
     ) => Promise<JobStatusCollection | ProblemDetails | any>;
   };
   jobs: {
-    get: (token: string) => Promise<JobStatusCollection | any>;
+    getByToken: (token: string) => Promise<JobStatusCollection>;
+    getById: (jobId: string) => Promise<JobStatus>;
+    getByQuery: (query: QueryJobsRequest) => Promise<QueryJobsResult>;
     cancel: (jobId: string) => Promise<any | ProblemDetails>;
   };
   models: {
@@ -49,7 +50,7 @@ class Civitai {
     // Image-related operations
     this.image = {
       // Convert text to image, optionally not waiting for job completion
-      fromText: async (input, wait = false) => {
+      fromText: async (input, wait = true) => {
         // Runtime validation
         try {
           fromTextSchema.parse(input);
@@ -68,8 +69,12 @@ class Civitai {
         console.log(`Creating TextToImage job with input=`, jobInput);
 
         // Submit job and process response
-        // @ts-ignore
-        const response = await JobsService.postV1ConsumerJobs(wait, jobInput);
+        const response = await JobsService.postV1ConsumerJobs(
+          wait,
+          false, // detailed = true
+          // @ts-ignore
+          jobInput
+        );
         const modifiedResponse = {
           token: response.token,
           jobs: response.jobs.map((job) => ({
@@ -151,16 +156,45 @@ class Civitai {
 
     // Job-related operations
     this.jobs = {
+      // Fetch job status by jobId
+      getById: async (jobId: string) => {
+        const response = await JobsService.getV1ConsumerJobs1(jobId);
+        const modifiedResponse = {
+          jobId: response.jobId,
+          cost: response.cost,
+          result: response.result,
+          scheduled: response.scheduled,
+        };
+        return modifiedResponse;
+      },
+
       // Fetch job status by token
-      get: async (token: string) => {
-        const fullResponse = await JobsService.getV1ConsumerJobs(token);
-        const modifiedJobs = fullResponse.jobs?.map((job) => ({
+      getByToken: async (token: string) => {
+        const response = await JobsService.getV1ConsumerJobs(token);
+        const modifiedResponse = response.jobs?.map((job) => ({
           jobId: job.jobId,
           cost: job.cost,
           result: job.result,
           scheduled: job.scheduled,
         }));
-        return { token, jobs: modifiedJobs };
+        return { token, jobs: modifiedResponse };
+      },
+
+      // Fetch job status by query
+      getByQuery: async (
+        query: QueryJobsRequest,
+        detailed: boolean = false
+      ) => {
+        try {
+          const response = await JobsService.postV1ConsumerJobsQuery(
+            detailed,
+            query
+          );
+          return response;
+        } catch (error) {
+          console.error(`Error fetching jobs by query: ${error}`);
+          throw error;
+        }
       },
 
       // Cancel a job by jobId
@@ -195,7 +229,7 @@ class Civitai {
       }
 
       // Check job status
-      const response = await this.jobs.get(token);
+      const response = await this.jobs.getByToken(token);
       const job = response.jobs && response.jobs[0];
       if (job && job.result && job.result.blobUrl) {
         return response;

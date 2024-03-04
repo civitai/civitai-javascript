@@ -3,10 +3,10 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { Job } from './Job';
-export type ClearAsset = (Job & {
-    /**
-     * The ID of the original job to clear
-     */
-    jobId?: string | null;
+export type MediaTaggingJob = (Job & {
+    modelId?: number;
+    mediaUrl?: string | null;
+    readonly cost?: number;
+    readonly type?: string | null;
 });
 

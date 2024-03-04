@@ -2,9 +2,9 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { Job } from './Job';
+import type { JobRequest } from './JobRequest';
 import type { TimeSpan } from './TimeSpan';
-export type GetBlob = (Job & {
+export type GetBlobRequest = (JobRequest & {
     /**
      * Get or set the key of the blob to upload
      */

@@ -3,12 +3,14 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { BaseModel } from './BaseModel';
-import type { Job } from './Job';
+import type { JobRequest } from './JobRequest';
 import type { PrepareModelAction } from './PrepareModelAction';
-export type PrepareModelJob = (Job & {
+export type PrepareModelJobRequest = (JobRequest & {
     baseModel?: BaseModel;
+    /**
+     * Get or set the model to prepare
+     */
     model?: string | null;
     action?: PrepareModelAction;
-    readonly type?: string | null;
 });
 

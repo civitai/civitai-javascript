@@ -17,6 +17,7 @@ export const FormPreview = () => {
       acc[curr.model] = {
         type: curr.type,
         strength: curr.strength,
+        triggerWord: curr.triggerWord,
       };
     }
     return acc;

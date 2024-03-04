@@ -4,9 +4,9 @@ dotenv.config({ path: ".env.test" });
 
 describe("Get Job Status by Token Functionality", () => {
   let civitai: Civitai;
-  let jobId: string = "3bd49f7d-f379-4fe5-b3d4-dc2f4d0ef0cd";
-  let token: string =
-    "W3siSm9icyI6WyIxMDVjMWNmYi0wZTY3LTQ4N2EtOWRmMS1jZGRiOTU1ZTMzNDgiXX1d";
+  const jobId = "3f071548-46c6-40d5-8e5a-210aa6b8bccc";
+  const token: string =
+    "W3siSm9icyI6WyIzZjA3MTU0OC00NmM2LTQwZDUtOGU1YS0yMTBhYTZiOGJjY2MiXX1d";
 
   beforeAll(() => {
     civitai = new Civitai({
@@ -15,7 +15,8 @@ describe("Get Job Status by Token Functionality", () => {
   });
 
   test("successfully fetches job status", async () => {
-    const response = await civitai.jobs.get(token);
+    const response = await civitai.jobs.getByToken(token);
+    // const response = await civitai.jobs.getById(jobId);
     console.log("Response:", JSON.stringify(response, null, 2));
     expect(response).toBeDefined();
   });
