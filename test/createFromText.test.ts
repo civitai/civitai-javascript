@@ -11,7 +11,6 @@ describe("Create FromText Job", () => {
   beforeAll(() => {
     civitai = new Civitai({
       auth: process.env.CIVITAI_API_TOKEN || "",
-      env: "production",
     });
   });
   test("successfully creates a FromText job", async () => {

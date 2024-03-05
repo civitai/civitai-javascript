@@ -4,9 +4,9 @@ dotenv.config({ path: ".env.test" });
 
 describe("Get Job Status by Token Functionality", () => {
   let civitai: Civitai;
-  const jobId = "3f071548-46c6-40d5-8e5a-210aa6b8bccc";
+  const jobId = "f1f4eee6-d1ee-4a82-a063-2c451823a86b";
   const token: string =
-    "W3siSm9icyI6WyIzZjA3MTU0OC00NmM2LTQwZDUtOGU1YS0yMTBhYTZiOGJjY2MiXX1d";
+    "W3siSm9icyI6WyJlYzU0NDM2Ny0xYjU5LTRjN2YtYTViOC00NmM3MzlhYjZlODYiXX1d";
 
   beforeAll(() => {
     civitai = new Civitai({

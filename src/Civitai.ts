@@ -45,15 +45,12 @@ class Civitai {
   };
 
   constructor(config: CivitaiConfig) {
-    // Determine the baseURL based on the env setting in the config
     const baseURL =
       config.env === "dev"
         ? "https://orchestration-dev.civitai.com"
         : "https://orchestration.civitai.com";
 
     OpenAPI.BASE = baseURL;
-
-    // Set authorization header for all API requests
     OpenAPI.HEADERS = {
       Authorization: `Bearer ${config.auth}`,
     };

@@ -1,6 +1,6 @@
-import Civitai from "../src/Civitai";
+import Civitai from "../dist/Civitai";
+import { QueryJobsRequest } from "../dist/models/QueryJobsRequest";
 import dotenv from "dotenv";
-import { QueryJobsRequest } from "../src/models/QueryJobsRequest";
 dotenv.config({ path: ".env.test" });
 
 describe("Get Jobs by Query Functionality", () => {
@@ -18,7 +18,7 @@ describe("Get Jobs by Query Functionality", () => {
   });
 
   test("successfully fetches jobs by query", async () => {
-    const response = await civitai.jobs.getByQuery(query);
+    const response = await civitai.jobs.getByQuery(query, true);
     console.log("Response:", JSON.stringify(response, null, 2));
     expect(response).toBeDefined();
   });

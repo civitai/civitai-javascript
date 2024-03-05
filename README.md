@@ -115,9 +115,10 @@ In the case of `Lora` and `LoCon` networks, set the `strength` of the network; f
 const civitai = new Civitai(options);
 ```
 
-| name   | type   | description                    |
-| ------ | ------ | ------------------------------ |
-| `auth` | string | **Required**. API access token |
+| name   | type                  | description                                                |
+| ------ | --------------------- | ---------------------------------------------------------- |
+| `auth` | string                | **Required**. API access token                             |
+| `env`  | `dev` \| `production` | Optional. The environment to use. Default is `production`. |
 
 ### `civitai.image.fromText`
 
@@ -199,8 +200,6 @@ const response = await civitai.jobs.getById(jobId);
   },
   "scheduled": false
 }
-
-
 ```
 
 ### `civitai.jobs.getByToken`
@@ -228,7 +227,6 @@ const response = await civitai.jobs.getByToken(token);
     }
   ]
 }
-
 ```
 
 ### `civitai.jobs.getByQuery`
@@ -270,9 +268,9 @@ const response = await civitai.jobs.getByQuery(query, detailed);
         "userId": 4,
         "requestId": -1,
         "RequestId": "eb6a8c28-c806-42e2-a349-5325702a1a96"
-      },
-    },
-  ],
+      }
+    }
+  ]
 }
 ```
 
