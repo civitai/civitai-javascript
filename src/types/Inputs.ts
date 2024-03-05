@@ -6,6 +6,7 @@ import { Scheduler } from "src/models/Scheduler";
 
 export interface CivitaiConfig {
   auth: string;
+  env?: "dev" | "production";
 }
 
 export type FromComfyInput = {

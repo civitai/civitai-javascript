@@ -19,13 +19,11 @@ import { usePlaygroundForm } from "@/hooks/use-form";
 import { cn, pollJob } from "@/lib/utils";
 import { formSchema } from "@/lib/form-schemas";
 import ExamplesSection from "./examples-section";
-import { Column } from "./ui/column";
 
 export default function Playground() {
   const form = usePlaygroundForm();
 
   const [imageUrl, setImageUrl] = useState("");
-  const [selectedImage, setSelectedImage] = useState(null);
 
   // Form states
   const [isSuccess, setIsSuccess] = useState(false);
@@ -78,7 +76,7 @@ export default function Playground() {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="grid md:grid-cols-2 gap-8 mx-auto justify-center">
-            <div className="flex flex-col space-y-4 justify-between">
+            <div className="flex flex-col space-y-4 justify-between md:min-h-[550px]">
               <AnimatePresence mode="wait">
                 <MotionConfig
                   transition={{
@@ -189,7 +187,7 @@ export default function Playground() {
         </form>
       </Form>
 
-      <ExamplesSection setSelectedImage={setSelectedImage} />
+      <ExamplesSection />
     </div>
   );
 }

@@ -16,7 +16,6 @@ import { Example, examples } from "@/data/examples";
 
 type SeeExampleOutputDialogProps = {
   item: any;
-  setSelectedImage: (image: any) => void;
   setOpen: (state: boolean) => void;
 };
 
@@ -42,7 +41,6 @@ function Item({ item, onSelectExample }: ItemProps) {
 
 const SeeExampleOutputDialog = ({
   item,
-  setSelectedImage,
   setOpen,
 }: SeeExampleOutputDialogProps) => {
   const form = useFormContext();
@@ -50,8 +48,6 @@ const SeeExampleOutputDialog = ({
 
   const onSubmit = () => {
     console.log("item:", item);
-
-    setSelectedImage(item.image);
     // form.setValue("image", item.image.url);
 
     setOpen(false);
@@ -125,7 +121,7 @@ const SeeExampleOutputDialog = ({
   );
 };
 
-export default function ExamplesSection({ setSelectedImage }) {
+export default function ExamplesSection() {
   const [selectedExample, setSelectedExample] = React.useState<Example | null>(
     null
   );
@@ -134,7 +130,6 @@ export default function ExamplesSection({ setSelectedImage }) {
     <React.Fragment>
       <SeeExampleOutputDialog
         item={selectedExample}
-        setSelectedImage={setSelectedImage}
         setOpen={() => setSelectedExample(null)}
       />
       <Column className="gap-2 w-full max-w-[90vw]">

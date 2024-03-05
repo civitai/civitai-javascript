@@ -11,9 +11,9 @@ describe("Create FromText Job", () => {
   beforeAll(() => {
     civitai = new Civitai({
       auth: process.env.CIVITAI_API_TOKEN || "",
+      env: "production",
     });
   });
-
   test("successfully creates a FromText job", async () => {
     const input: FromTextInput = {
       model: "urn:air:sd1:checkpoint:civitai:4201@130072",
@@ -37,7 +37,7 @@ describe("Create FromText Job", () => {
       quantity: 1,
     };
     // Long polling as we pass in `wait` parameter
-    const output = await civitai.image.fromText(input, false);
+    const output = await civitai.image.fromText(input, true);
     console.log("Response:", JSON.stringify(output, null, 2));
     expect(output).toBeDefined();
   }, 60000);

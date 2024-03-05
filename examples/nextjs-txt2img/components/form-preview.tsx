@@ -41,7 +41,7 @@ export const FormPreview = () => {
   return (
     <div className="space-y-2">
       <Label>Form input</Label>
-      <ScrollArea className="h-[360px] bg-accent rounded-md text-sm border">
+      <ScrollArea className="h-[400px] max-w-xs md:max-w-full bg-accent rounded-md text-sm border">
         <ReactJson
           src={formValues}
           style={{ padding: "12px" }}
