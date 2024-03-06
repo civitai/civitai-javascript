@@ -20,7 +20,9 @@ export const FormFields = () => {
         name="model"
         render={({ field }) => (
           <FormItem className="col-span-3">
-            <FormLabel htmlFor="civitai model">Civitai model</FormLabel>
+            <FormLabel htmlFor="civitai model">
+              Civitai checkpoint model
+            </FormLabel>
             <FormControl>
               <Input
                 placeholder="urn:air:sd1:checkpoint:civitai:4201@130072"
