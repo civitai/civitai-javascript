@@ -187,7 +187,7 @@ export default function Playground() {
         </form>
       </Form>
 
-      <ExamplesSection />
+      {/* <ExamplesSection /> */}
     </div>
   );
 }
