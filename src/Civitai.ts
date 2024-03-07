@@ -58,7 +58,7 @@ class Civitai {
     // Image-related operations
     this.image = {
       // Convert text to image, optionally not waiting for job completion
-      fromText: async (input, wait = true) => {
+      fromText: async (input, wait = false) => {
         // Runtime validation
         try {
           fromTextSchema.parse(input);
