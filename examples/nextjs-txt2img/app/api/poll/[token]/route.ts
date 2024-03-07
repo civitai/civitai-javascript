@@ -16,7 +16,7 @@ export async function GET(
   const token = params.token;
 
   try {
-    const response = await civitai.jobs.get(token);
+    const response = await civitai.jobs.getByToken(token);
 
     const jobs = response.jobs || [];
     const result = jobs.map((job: Job) => ({
