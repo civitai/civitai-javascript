@@ -72,7 +72,7 @@ class Civitai {
         const jobInput = {
           $type: "textToImage",
           ...input,
-          priority: { value: 1 },
+          priority: 1,
         };
         console.log(`Creating TextToImage job with input=`, jobInput);
 
@@ -113,7 +113,7 @@ class Civitai {
         const jobInput = {
           $type: "comfy",
           ...input,
-          priority: { value: 1 },
+          priority: 1,
         };
         console.log(`Creating ComfyUI job with input=`, jobInput);
 

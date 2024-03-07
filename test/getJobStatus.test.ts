@@ -6,7 +6,7 @@ describe("Get Job Status by Token Functionality", () => {
   let civitai: Civitai;
   const jobId = "f1f4eee6-d1ee-4a82-a063-2c451823a86b";
   const token: string =
-    "W3siSm9icyI6WyJlYzU0NDM2Ny0xYjU5LTRjN2YtYTViOC00NmM3MzlhYjZlODYiXX1d";
+    "W3siSm9icyI6WyI0ZWI1MzVkOC01N2JmLTRjMjMtODc1OC03ZDcxNWZiZDEyYzkiXX1d";
 
   beforeAll(() => {
     civitai = new Civitai({
@@ -15,8 +15,8 @@ describe("Get Job Status by Token Functionality", () => {
   });
 
   test("successfully fetches job status", async () => {
-    // const response = await civitai.jobs.getByToken(token);
-    const response = await civitai.jobs.getById(jobId);
+    const response = await civitai.jobs.getByToken(token);
+    // const response = await civitai.jobs.getById(jobId);
     console.log("Response:", JSON.stringify(response, null, 2));
     expect(response).toBeDefined();
   });
