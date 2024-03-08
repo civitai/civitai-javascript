@@ -72,7 +72,6 @@ class Civitai {
         const jobInput = {
           $type: "textToImage",
           ...input,
-          priority: 1,
         };
         console.log(`Creating TextToImage job with input=`, jobInput);
 
@@ -113,13 +112,19 @@ class Civitai {
         const jobInput = {
           $type: "comfy",
           ...input,
-          priority: 1,
         };
-        console.log(`Creating ComfyUI job with input=`, jobInput);
+        console.log(
+          `Creating ComfyUI job with input=`,
+          JSON.stringify(jobInput, null, 2)
+        );
 
         // Submit job and process response
-        // @ts-ignore
-        const response = await JobsService.postV1ConsumerJobs(wait, jobInput);
+        const response = await JobsService.postV1ConsumerJobs(
+          wait,
+          false,
+          // @ts-ignore
+          jobInput
+        );
         const modifiedResponse = {
           token: response.token,
           jobs: response.jobs.map((job) => ({
