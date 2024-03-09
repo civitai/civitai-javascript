@@ -1,13 +1,5 @@
 import { civitai } from "@/lib/civitai";
-
-interface JobResult {
-  blobUrl: string;
-  blobUrlExpirationDate: string;
-}
-
-interface Job {
-  result: JobResult;
-}
+import { JobStatus } from "civitai";
 
 export async function GET(
   req: Request,
@@ -18,13 +10,7 @@ export async function GET(
   try {
     const response = await civitai.jobs.getByToken(token);
 
-    const jobs = response.jobs || [];
-    const result = jobs.map((job: Job) => ({
-      imageUrl: job.result.blobUrl,
-      imageUrlExpirationDate: job.result.blobUrlExpirationDate,
-    }));
-
-    return new Response(JSON.stringify({ result }), {
+    return new Response(JSON.stringify(response), {
       headers: { "Content-Type": "application/json" },
       status: 200,
     });

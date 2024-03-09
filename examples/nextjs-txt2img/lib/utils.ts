@@ -12,14 +12,15 @@ export function pollJob(token: string): Promise<string> {
         const response = await fetch(`/api/poll/${token}`);
         const data = await response.json();
 
-        if (data.result && data.result[0] && data.result[0].imageUrl) {
-          resolve(data.result[0].imageUrl); // Resolve the promise with the imageUrl
+        // Check if the blobUrl is available in the response
+        if (data.jobs && data.jobs[0].result.blobUrl) {
+          resolve(data.jobs[0].result.blobUrl); // Resolve the promise with the blobUrl
         } else {
-          // If the job is not yet done, poll again after some delay
+          // If the blobUrl is not yet available, poll again after some delay
           setTimeout(checkStatus, 5000);
         }
       } catch (error) {
-        reject(error); // Reject the promise if there's an error
+        reject(error);
       }
     };
 

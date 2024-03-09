@@ -45,8 +45,8 @@ export default function Playground() {
 
       if (token) {
         pollJob(token)
-          .then((imageUrl) => {
-            setImageUrl(imageUrl);
+          .then((blobUrl) => {
+            setImageUrl(blobUrl);
             setIsSuccess(true);
           })
           .catch((error) => {
