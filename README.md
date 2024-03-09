@@ -35,7 +35,7 @@ const input = {
   model: "urn:air:sd1:checkpoint:civitai:4201@130072",
   params: {
     prompt:
-      "instagram photo, closeup face photo of 23 y.o Chloe in black sweater, cleavage, pale skin, (smile:0.4), hard shadows",
+      "RAW photo, face portrait photo of 26 y.o woman, wearing black dress, happy face, hard shadows, cinematic shot, dramatic lighting",
     negativePrompt:
       "(deformed iris, deformed pupils, semi-realistic, cgi, 3d, render, sketch, cartoon, drawing, anime, mutated hands and fingers:1.4), (deformed, distorted, disfigured:1.3)",
     scheduler: Scheduler.EULER_A,
@@ -43,7 +43,7 @@ const input = {
     cfgScale: 7,
     width: 512,
     height: 512,
-    clipSkip: 4,
+    clipSkip: 2,
   },
 };
 ```
@@ -82,7 +82,7 @@ const input = {
   model: "urn:air:sd1:checkpoint:civitai:4384@128713",
   params: {
     prompt:
-      "masterpiece, best quality, 1girl, IncrsAhri, multiple tails, fox tail, korean clothes, skirt, braid, arms behind back, seductive smile",
+      "masterpiece, best quality, 1girl, IncrsAhri, multiple tails, fox tail, korean clothes, skirt, braid, arms behind back",
     negativePrompt:
       "(worst quality:1.4), (low quality:1.4), simple background, bad anatomy",
     scheduler: Scheduler.EULER_A,
