@@ -11,7 +11,7 @@ export function usePlaygroundForm() {
     defaultValues: {
       model: "urn:air:sd1:checkpoint:civitai:4201@130072",
       prompt:
-        "RAW photo, face portrait photo of beautiful 26 y.o woman, cute face, wearing black dress, happy face, hard shadows, cinematic shot, dramatic lighting",
+        "RAW photo, face portrait photo of 26 y.o woman, wearing black dress, happy face, hard shadows, cinematic shot, dramatic lighting",
       negativePrompt:
         "(worst quality:1.4), (low quality:1.4), simple background, bad anatomy",
       scheduler: Scheduler.EULER_A,

@@ -6,7 +6,7 @@ describe("Get Job Status by Token Functionality", () => {
   let civitai: Civitai;
   const jobId = "f1f4eee6-d1ee-4a82-a063-2c451823a86b";
   const token: string =
-    "W3siSm9icyI6WyI4ZjhjYWViZS1iMmZiLTQ1NzctODI1NC1kYTgyZWQ2MTljZDAiXX1d";
+    "W3siSm9icyI6WyI0MGMxZjAzMy1jYjJhLTRlNzEtYjliNC05MDAxMmMxNjg5ZTIiXX1d";
 
   beforeAll(() => {
     civitai = new Civitai({
