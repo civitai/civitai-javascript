@@ -48,26 +48,23 @@ const input = {
 };
 ```
 
-Run a model and await the result:
+Run a model:
 
 ```js
 const response = await civitai.image.fromText(input);
-const output = response.jobs[0].result;
 ```
-
-_Note: Jobs timeout after 5 minutes._
-
-Or wait for the job to finish by running the generation in the background a.k.a short polling:
-
-```js
-const response = await civitai.image.fromText(input, false); // Add false flag
-```
-
 Then fetch the result later:
 
 ```js
 const output = civitai.jobs.get(response.token);
 ```
+
+Or wait for the job to finish by running the generation in the background a.k.a long polling:
+
+```js
+const response = await civitai.image.fromText(input, true); // Add true flag
+```
+_Note: Jobs timeout after 10 minutes._
 
 ### Using Additional Networks
 
