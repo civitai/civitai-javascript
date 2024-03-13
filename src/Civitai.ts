@@ -68,9 +68,13 @@ class Civitai {
           }
         }
 
+        // Infer the baseModel from the model value
+        const baseModel = input.model.includes("sdxl") ? "SDXL" : "SD_1_5";
+
         // Prepare job input with default values
         const jobInput = {
           $type: "textToImage",
+          baseModel,
           ...input,
         };
         console.log(`Creating TextToImage job with input=`, jobInput);
@@ -78,7 +82,7 @@ class Civitai {
         // Submit job and process response
         const response = await JobsService.postV1ConsumerJobs(
           wait,
-          false, // detailed = true
+          false, // detailed = false
           // @ts-ignore
           jobInput
         );

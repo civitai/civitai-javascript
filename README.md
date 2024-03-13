@@ -53,6 +53,7 @@ Run a model:
 ```js
 const response = await civitai.image.fromText(input);
 ```
+
 Then fetch the result later:
 
 ```js
@@ -64,6 +65,7 @@ Or wait for the job to finish by running the generation in the background a.k.a 
 ```js
 const response = await civitai.image.fromText(input, true); // Add true flag
 ```
+
 _Note: Jobs timeout after 10 minutes._
 
 ### Using Additional Networks
@@ -144,7 +146,6 @@ const response = await civitai.image.fromText(options);
 
 | name                    | type                                                                  | description                                                                                                                                                                                                                                                                                                                               |
 | ----------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `baseModel`             | enum `"SD_1_5"`, `"SDXL"`                                             | **Required**. Base Stable Diffusion Model.                                                                                                                                                                                                                                                                                                |
 | `model`                 | string \| null                                                        | **Required**. The Civitai model to use for generation.                                                                                                                                                                                                                                                                                    |
 | `params.prompt`         | string \| null                                                        | **Required**. The main prompt for the image generation.                                                                                                                                                                                                                                                                                   |
 | `params.negativePrompt` | string \| null                                                        | Optional. The negative prompt for the image generation.                                                                                                                                                                                                                                                                                   |
@@ -335,7 +336,6 @@ Here’s an example using the Civitai JavaScript client:
 ```js
 await civitai.image.fromText({
   input: {
-    baseModel: "SD_1_5",
     model: "urn:air:sd1:checkpoint:civitai:4384@128713",
     params: {
       prompt: "a cat in a field of flowers",
