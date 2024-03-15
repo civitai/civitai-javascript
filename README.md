@@ -423,13 +423,9 @@ await civitai.image.fromText({
 
 Your webhook handler should now receive webhooks from Civitai. Once you’ve deployed your app, change the value of the webhook URL to your production webhook handler endpoint when creating generations.
 
-For a real-world example of webhook handling in Next.js, check out [the Nextjs ComfyUI example](https://github.com/civitai/civitai-javascript/tree/master/examples/nextjs-comfyui).
-
 ## Examples
 
 [Build a web app with Next.js App Router](https://github.com/civitai/civitai-javascript/tree/master/examples/nextjs-txt2img)
-
-[Build a ComfyUI app](https://github.com/civitai/civitai-javascript/tree/master/examples/nextjs-comfyui)
 
 ## Contribution
 
