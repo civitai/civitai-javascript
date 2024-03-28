@@ -72,7 +72,7 @@ _Note: Jobs timeout after 10 minutes._
 
 The SDK supports additional networks: LoRA, VAE, Hypernetwork, Textual Inversion, LyCORIS, Checkpoint, and LoCon. See the full list [here](src/models/AssetType.ts).
 
-To use any of the networks availabe on Civitai, simply the `additionNetworks` field into the input:
+To use any of the networks availabe on Civitai, simply add the `additionalNetworks` field into the input:
 
 ```js
 import { Scheduler, AssetType } from "civitai";
