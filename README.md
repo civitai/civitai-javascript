@@ -95,7 +95,6 @@ const input = {
   // Add this `additionalNetworks` field
   additionalNetworks: {
     "urn:air:sd1:lora:civitai:162141@182559": {
-      type: AssetType.LORA,
       strength: 1.0,
     },
   },

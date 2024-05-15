@@ -35,7 +35,6 @@ export const fromTextSchema = z
       .record(
         z
           .object({
-            type: z.string(),
             strength: z.number().optional(),
             triggerWord: z.string().optional(),
           })
