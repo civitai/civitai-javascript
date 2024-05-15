@@ -56,3 +56,4 @@ dist/
 
 # OpenAPI output
 generated/
+swagger.json
