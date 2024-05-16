@@ -44,6 +44,8 @@ export const fromTextSchema = z
     controlNets: z.array(controlNetSchema).optional(),
     callbackUrl: z.string().optional(),
     quantity: z.number().optional().default(1),
+    batchSize: z.number().optional().default(1),
+    priority: z.string().optional(),
     properties: z.record(z.any()).optional(),
   })
   .strict();

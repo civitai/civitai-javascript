@@ -158,24 +158,7 @@ const response = await civitai.image.fromText(options);
 | `callbackUrl`           | string \| null                                                        | Optional. URL that will be invoked upon completion of this job                                                                                                                                                                                                                                                                            |
 | `additionalNetworks`    | [ImageJobNetworkParams](src/models/ImageJobNetworkParams.ts) \| null  | Optional. An associative list of additional networks, keyed by the AIR of the network. Each network is of type [AssetType](src/models/AssetType.ts).                                                                                                                                                                                      |
 | `controlNets`           | Array<[ImageJobControlNet](src/models/ImageJobControlNet.ts)> \| null | Optional. An associative list of additional networks.                                                                                                                                                                                                                                                                                     |
-
-#### Additional Networks
-
-| `additionalNetworks` | Record<string, [ImageJobNetworkParams](src/models/ImageJobNetworkParams.ts)> | Optional. An associative list of additional networks, keyed by the AIR of the network. Each network is described by an `ImageJobNetworkParams` object. |
-| -------------------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `type`               | [`AssetType`](src/models/AssetType.ts)                                       | Optional. The type of the asset. <br/><br/>Can be one of `Lora`, `Hypernetwork`, `TextualInversion`, `Lycoris`, `Checkpoint`, `Vae`, `LoCon`.          |
-| `strength`           | number                                                                       | Optional. In case of Lora and LoCon, set the strength of the network.                                                                                  |
-| `triggerWord`        | string                                                                       | Optional. In case of a TextualInversion, set the trigger word of the network.                                                                          |
-
-#### ControlNets
-
-| `controlNets`  | Array<[ImageJobControlNet](src/models/ImageJobControlNet.ts)> | Optional. An array of control networks that can be applied to the image generation process. <br/><br/>Each `ImageJobControlNet` object in the array can have the following properties: |
-| -------------- | ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `preprocessor` | [ImageTransformer](src/models/ImageTransformer.ts) \| null    | Optional. Specifies the image transformer to be applied as a preprocessor. <br/><br/>Possible values are `Canny`, `DepthZoe`, `SoftedgePidinet`, `Rembg`.                              |
-| `weight`       | number \| null                                                | Optional. The weight of the control net.                                                                                                                                               |
-| `startStep`    | number \| null                                                | Optional. The step at which the control net starts to apply.                                                                                                                           |
-| `endStep`      | number \| null                                                | Optional. The step at which the control net stops applying.                                                                                                                            |
-| `imageUrl`     | string \| null                                                | Optional. The URL of the image associated with the controlnet.                                                                                                                         |
+| `batchSize`             | number \| null                                                        | Optional. The number of images to generate in a single batch.                                                                                                                                                                                                                                                                             |
 
 ### `civitai.jobs.getById`
 

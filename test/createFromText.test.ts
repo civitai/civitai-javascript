@@ -1,6 +1,6 @@
 import Civitai from "../dist/Civitai";
 import { AssetType } from "../dist/models/AssetType";
-import { FromTextInput } from "../dist/models/InputTypes";
+import { FromTextInput } from "../dist/types/Inputs";
 import { Scheduler } from "../dist/models/Scheduler";
 import dotenv from "dotenv";
 dotenv.config({ path: ".env.test" });
@@ -28,12 +28,13 @@ describe("Create FromText Job", () => {
         clipSkip: 1,
       },
       // additionalNetworks: {
-      //   "civitai:58390@62833": {
-      //     type: AssetType.LORA,
+      //   "urn:air:sdxl:lycoris:civitai:149210@166591": {
       //     strength: 1,
       //   },
       // },
       quantity: 1,
+      priority: "high",
+      batchSize: 4,
     };
     // Long polling as we pass in `wait` parameter
     const output = await civitai.image.fromText(input, true);
