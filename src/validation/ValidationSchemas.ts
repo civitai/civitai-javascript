@@ -45,7 +45,7 @@ export const fromTextSchema = z
     callbackUrl: z.string().optional(),
     quantity: z.number().optional().default(1),
     batchSize: z.number().optional().default(1),
-    priority: z.string().optional(),
+    priority: z.union([z.string(), z.number()]).optional(),
     properties: z.record(z.any()).optional(),
   })
   .strict();
