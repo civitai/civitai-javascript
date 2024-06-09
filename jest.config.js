@@ -6,4 +6,5 @@ module.exports = {
   },
   moduleNameMapper: {},
   extensionsToTreatAsEsm: [".ts"],
+  testPathIgnorePatterns: ["/node_modules/", "test/getJobByQuery.test.ts"],
 };

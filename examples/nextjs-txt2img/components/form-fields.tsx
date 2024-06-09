@@ -25,7 +25,7 @@ export const FormFields = () => {
             </FormLabel>
             <FormControl>
               <Input
-                placeholder="urn:air:sd1:checkpoint:civitai:4201@130072"
+                placeholder="urn:air:sd1:checkpoint:civitai:4384@128713"
                 {...field}
               />
             </FormControl>

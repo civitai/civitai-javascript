@@ -32,7 +32,7 @@ const civitai = new Civitai({
 import { Scheduler } from "civitai";
 
 const input = {
-  model: "urn:air:sd1:checkpoint:civitai:4201@130072",
+  model: "urn:air:sdxl:checkpoint:civitai:101055@128078",
   params: {
     prompt:
       "RAW photo, face portrait photo of 26 y.o woman, wearing black dress, happy face, hard shadows, cinematic shot, dramatic lighting",
@@ -94,7 +94,8 @@ const input = {
   },
   // Add this `additionalNetworks` field
   additionalNetworks: {
-    "urn:air:sd1:lora:civitai:162141@182559": {
+    // Detail enhancer LoRA: https://civitai.com/models/82098 add-more-details-detail-enhancer-tweaker-lora
+    "urn:air:sd1:lora:civitai:82098@87153": {
       strength: 1.0,
     },
   },
