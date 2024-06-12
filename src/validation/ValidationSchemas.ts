@@ -25,8 +25,8 @@ export const fromTextSchema = z
         scheduler: z.string().optional(),
         steps: z.number().optional(),
         cfgScale: z.number().optional(),
-        width: z.number().gte(1).lte(1024),
-        height: z.number().gte(1).lte(1024),
+        width: z.number().gte(1).lte(1440),
+        height: z.number().gte(1).lte(1440),
         seed: z.number().optional(),
         clipSkip: z.number().optional(),
       })
