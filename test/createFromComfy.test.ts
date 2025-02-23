@@ -1,5 +1,5 @@
 import Civitai from "../dist/Civitai";
-import { FromComfyInput } from "../dist/models/InputTypes";
+import { FromComfyInput } from "../dist/types/Inputs";
 import dotenv from "dotenv";
 import fs from "fs";
 import path from "path";

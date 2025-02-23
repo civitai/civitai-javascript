@@ -12,6 +12,7 @@ export interface CivitaiConfig {
 export type FromComfyInput = {
   params?: Record<string, any> | null;
   callbackUrl?: string;
+  quantity?: number;
 };
 
 export type FromTextInput = {

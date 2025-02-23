@@ -69,7 +69,21 @@ class Civitai {
         }
 
         // Infer the baseModel from the model value
-        const baseModel = input.model.includes("sdxl") ? "SDXL" : "SD_1_5";
+        const modelKeywordsMap: Record<string, string> = {
+          sdxl: "SDXL",
+          flux1: "Flux1",
+        };
+        
+        const determineBaseModel = (modelUri: string): string => {
+          for (const keyword in modelKeywordsMap) {
+            if (modelUri.includes(keyword)) {
+              return modelKeywordsMap[keyword];
+            }
+          }
+          return "SD_1_5";
+        };
+        
+        const baseModel = determineBaseModel(input.model);
 
         // Prepare job input with default values
         const jobInput = {
